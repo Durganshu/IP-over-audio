@@ -90,6 +90,7 @@ void encode_out(const char *s){
     }
     fputc('\n', stdout);
 }
+//fputc not being called
 static void decode_out_aux(MTree *tree, const char *s){
     if(tree == NULL) return;
     if(*s == '\0')
@@ -157,3 +158,4 @@ static void drop_tree_aux(MTree *root){
 void drop_tree(void){
     drop_tree_aux(root);
 }
+//https://stackoverflow.com/questions/28045172/morse-code-converter-in-c

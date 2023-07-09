@@ -5,6 +5,6 @@
 
 void decode_out_aux(MTree *tree, const char *s);
 
-void decode_out(MTree *root, const char *s);
+void decode_out( const char *s);
 
 #endif

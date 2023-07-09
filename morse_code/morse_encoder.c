@@ -16,8 +16,6 @@ void encode_out(const char *s){
             fputs(table[NUM][ch - '0'], stdout);
         else if(ch == ' ')
             fputc('/', stdout);//need rest space skip ?
-        else 
-            ;//invalid character => ignore
         fputc(' ', stdout);
     }
     fputc('\n', stdout);

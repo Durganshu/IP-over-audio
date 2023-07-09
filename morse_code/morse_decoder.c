@@ -16,7 +16,7 @@ void decode_out_aux(MTree *tree, const char *s){
         decode_out_aux(tree->bar, ++s);
 }
 
-void decode_out(MTree *root, const char *s){
+void decode_out(const char *s){
     char *p;
     while(*s){
         p = strchr(s, ' ');

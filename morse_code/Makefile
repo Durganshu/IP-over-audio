@@ -46,7 +46,7 @@
 # 	rm -f $(OBJS) $(TARGET)
 
 CC = gcc
-CFLAGS = -Wall -Wextra
+CFLAGS = -pg -g -Wall -Wextra
 TARGET = test_morse real_morse
 SRCS = test_morse.c morse_base.c morse_decoder.c morse_encoder.c real_morse.c
 OBJS = $(SRCS:.c=.o)

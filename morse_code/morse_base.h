@@ -53,11 +53,13 @@ typedef struct mtree {
     struct mtree *bar;
 } MTree;
 
-void make_tree(MTree *root);
-void drop_tree_aux(MTree *root);
-void drop_tree(MTree *root);
+MTree *root;
+
+void make_tree();
+void drop_tree_aux();
+void drop_tree();
 void insert_aux(MTree **tree, char ch, const char *s);
-void insert(MTree *root, char ch, const char *s);
+void insert(char ch, const char *s);
 
 
 #endif

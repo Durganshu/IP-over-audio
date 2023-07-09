@@ -4,14 +4,14 @@
 #include <ctype.h>
 #include "morse_base.h"
 
-void make_tree(MTree *root){
+void make_tree(){
     root = calloc(1, sizeof(*root));
     //root->value = '/';//anything
     int i;
     for(i = 0; i < 26; ++i)
-        insert(root, 'A'+i, table[ALPHA][i]);
+        insert('A'+i, table[ALPHA][i]);
     for(i = 0; i < 10; ++i)
-        insert(root,'0'+i, table[NUM][i]);
+        insert('0'+i, table[NUM][i]);
 }
 void drop_tree_aux(MTree *root){
     if(root){
@@ -20,7 +20,7 @@ void drop_tree_aux(MTree *root){
         free(root);
     }
 }
-void drop_tree(MTree *root){
+void drop_tree(){
     drop_tree_aux(root);
 }
 
@@ -35,7 +35,7 @@ void insert_aux(MTree **tree, char ch, const char *s){
         insert_aux(&(*tree)->bar, ch, ++s);
 }
 
-void insert(MTree *root, char ch, const char *s){
+void insert(char ch, const char *s){
     if(*s == '.')
         insert_aux(&root->dot, ch, ++s);
     else if(*s == '-')

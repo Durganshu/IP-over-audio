@@ -10,13 +10,12 @@
 
 int main(void){
 
-    MTree *root;
-    make_tree(root);
-    encode_out("HELLO WORLD");
-    encode_out("JOKE");
-    decode_out(root, ".... . .-.. .-.. --- / .-- --- .-. .-.. -..");
-    decode_out(root, ".--- --- -.- .");
-    drop_tree(root);
+    make_tree();
+    // encode_out("HELLO WORLD");
+    // encode_out("JOKE");
+    decode_out( ".... . .-.. .-.. --- / .-- --- .-. .-.. -..");
+    decode_out(".--- --- -.- .");
+    drop_tree();
     return 0;
 }
 
