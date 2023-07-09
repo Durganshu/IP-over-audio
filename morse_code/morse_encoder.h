@@ -2,6 +2,6 @@
 #define MORSE_ENCODER
 #include "morse_base.h"
 
-void encode_out(const char *s);
+void encode(const char *s);
 
 #endif

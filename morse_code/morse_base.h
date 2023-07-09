@@ -53,7 +53,7 @@ typedef struct mtree {
     struct mtree *bar;
 } MTree;
 
-MTree *root;
+extern MTree *root;
 
 void make_tree();
 void drop_tree_aux();

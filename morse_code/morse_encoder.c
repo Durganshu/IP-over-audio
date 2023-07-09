@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include "morse_encoder.h"
 
-void encode_out(const char *s){
+void encode(const char *s){
     for(;;++s){
         char ch = *s;
         if(ch == '\0')

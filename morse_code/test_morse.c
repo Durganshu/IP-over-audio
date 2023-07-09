@@ -7,14 +7,14 @@
 #include "morse_decoder.h"
 #include "morse_encoder.h"
 
+#define MAX_LENGTH 100
 
 int main(void){
 
     make_tree();
-    // encode_out("HELLO WORLD");
-    // encode_out("JOKE");
-    decode_out( ".... . .-.. .-.. --- / .-- --- .-. .-.. -..");
-    decode_out(".--- --- -.- .");
+    encode("Durganshu");
+    encode("Mishra");
+    decode( "-.. ..- .-. --. .- -. ... .... ..- / -- .. ... .... .-. .-");
     drop_tree();
     return 0;
 }

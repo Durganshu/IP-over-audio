@@ -4,19 +4,19 @@
 #include <ctype.h>
 #include "morse_decoder.h"
 
-void decode_out_aux(MTree *tree, const char *s){
+void decoder_aux(MTree *tree, const char *s){
     if(tree == NULL) return;
     if(*s == '\0')
         fputc(tree->value, stdout);
     else if(*s == '/')
         fputc(' ', stdout);
     else if(*s == '.')
-        decode_out_aux(tree->dot, ++s);
+        decoder_aux(tree->dot, ++s);
     else if(*s == '-')
-        decode_out_aux(tree->bar, ++s);
+        decoder_aux(tree->bar, ++s);
 }
 
-void decode_out(const char *s){
+void decode(const char *s){
     char *p;
     while(*s){
         p = strchr(s, ' ');
@@ -25,11 +25,11 @@ void decode_out(const char *s){
                 char code[p-s+1];
                 memcpy(code, s, p-s);
                 code[p-s]='\0';
-                decode_out_aux(root, code);
+                decoder_aux(root, code);
             }
             s = p + 1;
         } else {
-            decode_out_aux(root, s);
+            decoder_aux(root, s);
             break;
         }
     }

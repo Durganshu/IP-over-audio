@@ -3,8 +3,8 @@
 
 #include "morse_base.h"
 
-void decode_out_aux(MTree *tree, const char *s);
+void decoder_aux(MTree *tree, const char *s);
 
-void decode_out( const char *s);
+void decode( const char *s);
 
 #endif

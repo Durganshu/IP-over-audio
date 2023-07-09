@@ -4,6 +4,8 @@
 #include <ctype.h>
 #include "morse_base.h"
 
+MTree *root;
+
 void make_tree(){
     root = calloc(1, sizeof(*root));
     //root->value = '/';//anything
