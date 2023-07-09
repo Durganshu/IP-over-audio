@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include "morse_base.h"
+
+void make_tree(MTree *root){
+    root = calloc(1, sizeof(*root));
+    //root->value = '/';//anything
+    int i;
+    for(i = 0; i < 26; ++i)
+        insert(root, 'A'+i, table[ALPHA][i]);
+    for(i = 0; i < 10; ++i)
+        insert(root,'0'+i, table[NUM][i]);
+}
+void drop_tree_aux(MTree *root){
+    if(root){
+        drop_tree_aux(root->dot);
+        drop_tree_aux(root->bar);
+        free(root);
+    }
+}
+void drop_tree(MTree *root){
+    drop_tree_aux(root);
+}
+
+void insert_aux(MTree **tree, char ch, const char *s){
+    if(*tree == NULL)
+        *tree = calloc(1, sizeof(**tree));
+    if(*s == '\0')
+        (*tree)->value = ch;
+    else if(*s == '.')
+        insert_aux(&(*tree)->dot, ch, ++s);
+    else if(*s == '-')
+        insert_aux(&(*tree)->bar, ch, ++s);
+}
+
+void insert(MTree *root, char ch, const char *s){
+    if(*s == '.')
+        insert_aux(&root->dot, ch, ++s);
+    else if(*s == '-')
+        insert_aux(&root->bar, ch, ++s);
+}
