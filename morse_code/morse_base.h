@@ -56,8 +56,8 @@ typedef struct mtree {
 extern MTree *root;
 
 void make_tree();
-void drop_tree_aux();
-void drop_tree();
+void delete_tree_aux();
+void delete_tree();
 void insert_aux(MTree **tree, char ch, const char *s);
 void insert(char ch, const char *s);
 

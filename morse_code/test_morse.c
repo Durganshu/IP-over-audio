@@ -53,7 +53,7 @@ int main(void){
 
     // encode("Hello World");
     // decode( ".... . .-.. .-.. --- / .-- --- .-. .-.. -..");
-    // drop_tree();
+    delete_tree();
     return 0;
 }
 

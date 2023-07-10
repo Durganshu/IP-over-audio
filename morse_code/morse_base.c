@@ -15,15 +15,15 @@ void make_tree(){
     for(i = 0; i < 10; ++i)
         insert('0'+i, table[NUM][i]);
 }
-void drop_tree_aux(MTree *root){
+void delete_tree_aux(MTree *root){
     if(root){
-        drop_tree_aux(root->dot);
-        drop_tree_aux(root->bar);
+        delete_tree_aux(root->dot);
+        delete_tree_aux(root->bar);
         free(root);
     }
 }
-void drop_tree(){
-    drop_tree_aux(root);
+void delete_tree(){
+    delete_tree_aux(root);
 }
 
 void insert_aux(MTree **tree, char ch, const char *s){
