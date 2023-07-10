@@ -5,6 +5,7 @@
 #include "morse_decoder.h"
 
 void decoder_aux(MTree *tree, const char *s){
+    // printf("Char is = %s\n\n", s);
     if(tree == NULL) return;
     if(*s == '\0')
         fputc(tree->value, stdout);
@@ -18,8 +19,11 @@ void decoder_aux(MTree *tree, const char *s){
 
 void decode(const char *s){
     char *p;
+    
     while(*s){
+
         p = strchr(s, ' ');
+        
         if(p){
             if(p-s != 0){
                 char code[p-s+1];
@@ -33,6 +37,7 @@ void decode(const char *s){
             break;
         }
     }
+    
     fputc('\n', stdout);
 }
 
