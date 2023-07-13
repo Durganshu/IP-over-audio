@@ -19,259 +19,164 @@
 
 #include <math.h>
 #include <time.h>
-#include <text_to_morse.h>
+#include "text_to_morse.h"
 
 // In the original github repo I found, there is an option
 // for the user to set the frequency, rate, and output file name.
 
 int main(int argc, char *argv[]) 
 {
-     /* Set default values */
-     double frequency = default_frequency;
-     int rate_wpm = default_rate_wpm;
-     double unit_duration = WAVFILE_SAMPLES_PER_SECOND / default_rate_wpm;
+	/* Set default values */
+	double frequency = default_frequency;
+	int rate_wpm = default_rate_wpm;
+	double unit_duration = WAVFILE_SAMPLES_PER_SECOND / default_rate_wpm;
 
-     FILE *infile, *outfile;
-     char infile_name[MAX_FILENAME], outfile_name[MAX_FILENAME];
-     bool outfile_specified = false;
+	FILE *input_file, *output_file;
+	char input_file_name[MAX_FILENAME], output_file_name[MAX_FILENAME];
 
-     /* Array of numeric values for each tone's waveform */
-     short waveform[MAX_SIGNAL_LENGTH];
+	/* Array of numeric values for each tone's waveform */
+	short waveform[MAX_SIGNAL_LENGTH];
 
-     /* Lookup table of morse signal codes */
-     int morse_table[MAX_CHARS][MAX_CHAR_SEQ + 1] = {
-	  {'A', DOT, DASH, ENDCODE },
-	  {'B', DASH, DOT, DOT, DOT, ENDCODE },
-	  {'C', DASH, DOT, DASH, DOT, ENDCODE },
-	  {'D', DASH, DOT, DOT, ENDCODE },
-	  {'E', DOT, ENDCODE },
-	  {'F', DOT, DOT, DASH, DOT, ENDCODE },
-	  {'G', DASH, DASH, DOT, ENDCODE },
-	  {'H', DOT, DOT, DOT, DOT, ENDCODE },
-	  {'I', DOT, DOT, ENDCODE },
-	  {'J', DOT, DASH, DASH, DASH, ENDCODE },
-	  {'K', DASH, DOT, DASH, ENDCODE },
-	  {'L', DOT, DASH, DOT, DOT, ENDCODE },
-	  {'M', DASH, DASH, ENDCODE },
-	  {'N', DASH, DOT, ENDCODE },
-	  {'O', DASH, DASH, DASH, ENDCODE },
-	  {'P', DOT, DASH, DASH, DOT, ENDCODE },
-	  {'Q', DASH, DASH, DOT, DASH, ENDCODE },
-	  {'R', DOT, DASH, DOT, ENDCODE },
-	  {'S', DOT, DOT, DOT, ENDCODE },
-	  {'T', DASH, ENDCODE },
-	  {'U', DOT, DOT, DASH, ENDCODE },
-	  {'V', DOT, DOT, DOT, DASH, ENDCODE },
-	  {'W', DOT, DASH, DASH, ENDCODE },
-	  {'X', DASH, DOT, DOT, DASH, ENDCODE },
-	  {'Y', DASH, DOT, DASH, DASH, ENDCODE },
-	  {'Z', DASH, DASH, DOT, DOT, ENDCODE },
-	  {'0', DASH, DASH, DASH, DASH, DASH, ENDCODE },
-	  {'1', DOT, DASH, DASH, DASH, DASH, ENDCODE },
-	  {'2', DOT, DOT, DASH, DASH, DASH, ENDCODE },
-	  {'3', DOT, DOT, DOT, DASH, DASH, ENDCODE },
-	  {'4', DOT, DOT, DOT, DOT, DASH, ENDCODE },
-	  {'5', DOT, DOT, DOT, DOT, DOT, ENDCODE },
-	  {'6', DASH, DOT, DOT, DOT, DOT, ENDCODE },
-	  {'7', DASH, DASH, DOT, DOT, DOT, ENDCODE },
-	  {'8', DASH, DASH, DASH, DOT, DOT, ENDCODE },
-	  {'9', DASH, DASH, DASH, DASH, DOT, ENDCODE },
-	  {'.', DOT, DASH, DOT, DASH, DOT, DASH, ENDCODE },
-	  {',', DASH, DASH, DOT, DOT, DASH, DASH, ENDCODE },
-	  {'?', DOT, DOT, DASH, DASH, DOT, DOT, ENDCODE },
-	  {'\'', DOT, DASH, DASH, DASH, DASH, DOT, ENDCODE },
-	  {'!', DASH, DOT, DASH, DOT, DASH, DASH, ENDCODE },
-	  {'/', DASH, DOT, DOT, DASH, DOT, ENDCODE },
-	  {'(', DASH, DOT, DASH, DASH, DOT, ENDCODE },
-	  {')', DASH, DOT, DASH, DASH, DOT, DASH, ENDCODE }, 
-	  {'&', DOT, DASH, DOT, DOT, DOT, ENDCODE },
-	  {':', DASH, DASH, DASH, DOT, DOT, DOT, ENDCODE },
-	  {';', DASH, DOT, DASH, DOT, DASH, DOT, ENDCODE },
-	  {'=', DASH, DOT, DOT, DOT, DASH, ENDCODE },
-	  {'+', DOT, DASH, DOT, DASH, DOT, ENDCODE },
-	  {'-', DASH, DOT, DOT, DOT, DOT, DASH, ENDCODE },
-	  {'_', DOT, DOT, DASH, DASH, DOT, DASH, ENDCODE },
-	  {'\"', DOT, DASH, DOT, DOT, DASH, DOT, ENDCODE },
-	  {'$', DOT, DOT, DOT, DASH, DOT, DOT, DASH, ENDCODE },
-	  {'@', DOT, DASH, DASH, DOT, DASH, DOT, ENDCODE },
-	  {' ', WORD_SPC, ENDCODE }
-     };
-     /* Lookup table indexed to ASCII codes */
-     int ascii_table[MAX_ASCII];
-     int morse_table_index;
-     int *signal_code;
+	/* Lookup table indexed to ASCII codes */
+	int ascii_table[MAX_ASCII];
+	int morse_table_index;
+	int *signal_code;
 
-     int i, ascii_char;
-     int lower_upper_ascii_difference = 'a' - 'A';
+	int i, ascii_char;
+	int lower_upper_ascii_difference = 'a' - 'A';
 
+	if (argc > 2) {
+		fprintf(stderr, "Too many arguments.\n\n %s\n", message[MSG_HELP]);
+		exit(EXIT_FAILURE);
+	}
+	else if (argc == 2) {
+		strcpy(input_file_name, argv[1]);
+	}
+	else {
+		fprintf(stderr, "No input file specified.\n\n %s\n", message[MSG_HELP]);
+		exit(EXIT_FAILURE);
+	}
 
-     /* Process options:
-      * - Optionally set frequency and rate
-      * - Open files for input and output
-      */
+	/* Open input file */
+	input_file = fopen(input_file_name, "r");
+	if (input_file == NULL) {
+		fprintf(stderr, "Could not read file %s.\n", input_file_name);
+		exit(EXIT_FAILURE);
+	}
 
-     while ((c = getopt_long(argc, argv, "hvf:r:o:",
-			     long_options, &option_index)) != -1) {
-	  switch (c) {
-	  case 'h':
-	       printf("%s\n", message[MSG_HELP]);
-	       exit(0);
-	  case 'v':
-	       printf("%s\n", message[MSG_VERSION]);
-	       exit(0);
-	  case 'f':
-	       if (sscanf(optarg, "%lf", &frequency) != 1) {
-		    fprintf(stderr, "Bad frequency %s\n", optarg);
-		    exit(EXIT_FAILURE);
-	       } else break;
-	  case 'r':
-	       if (sscanf(optarg, "%d", &rate_wpm) != 1) {
-		    fprintf(stderr, "Bad rate %s\n", optarg);
-		    exit(EXIT_FAILURE);
-	       } else {
-		    unit_duration =
-			 WAVFILE_SAMPLES_PER_SECOND / rate_wpm;
-		    /* TODO -- substitute real calculation here */
-		    break;
-	       }
-	  case 'o':
-	       strcpy(outfile_name, optarg);
-	       outfile_specified = true;
-	       break;
-	  case '?':
-	       exit(EXIT_FAILURE);
-	  default:
-	       abort();
-	  }
-     }
+	/* Open output file, using input file name with .wav extension */
+	strcpy(output_file_name, input_file_name);
+	i = strlen(output_file_name);
+	if (output_file_name[i - 4] == '.') {
+		strcpy(&output_file_name[i - 3], "wav");
+	}
+	else {
+		fprintf(stderr,
+				"Bad format for file name %s,
+				please provide a text file (.txt extension).\n",
+				input_file_name);
+		exit(EXIT_FAILURE);
+	}
 
-     if (optind < argc) {
-	  if (argc - optind > 1) {
-	       fprintf(stderr, "Too many arguments.\n\n %s\n",
-		       message[MSG_HELP]);
-	       exit(EXIT_FAILURE);
-	  } else {
-	       strcpy(infile_name, argv[optind]);
-	  }
-     } else {
-	  fprintf(stderr, "No input file specified.\n\n %s\n",
-		  message[MSG_HELP]);
-	  exit(EXIT_FAILURE);
-     }
+	output_file = wavfile_open(output_file_name);
+	if (output_file == NULL) {
+		fprintf(stderr, "Could not write to file %s.\n", output_file_name);
+		exit(EXIT_FAILURE);
+	}
 
-     /* Open input file */
-     infile = fopen(infile_name, "r");
-     if (infile == NULL) {
-	  fprintf(stderr,
-		  "Could not open file %s for reading.\n", infile_name);
-	  exit(EXIT_FAILURE);
-     }
-
-     /* Open output file: Use input file name with .wav extension 
-      * unless output filename was specified 
-      */
-     if (outfile_specified == false) {
-	  strcpy(outfile_name, infile_name);
-	  i = strlen(outfile_name);
-	  if (outfile_name[i - 4] == '.') {
-	       strcpy(&outfile_name[i - 3], "wav");
-	  } else {
-	       fprintf(stderr,
-		       "Bad format for file name %s\n", infile_name);
-	       exit(EXIT_FAILURE);
-	  }
-     }
-     outfile = wavfile_open(outfile_name);
-     if (outfile == NULL) {
-	  fprintf(stderr, "Could not open file %s for writing.\n", outfile_name);
-	  exit(EXIT_FAILURE);
-     }
-
-     /* Make lookup table to access morse codes through ASCII values */
-     /* First make empty ASCII entries point to space character, which
-	is last value of morse_table */
-     for (i = 0; i <= MAX_ASCII; ++i) {
-	  ascii_char = morse_table[MAX_CHARS][0];
-     }
-     for (i = 0; i < MAX_CHARS; ++i) {
-	  ascii_char = morse_table[i][0];
-	  ascii_table[ascii_char] = i;
-     }
+	/* Make lookup table to access morse codes through ASCII values */
+	/* First make empty ASCII entries point to space character,
+		which is last value of morse_table */
+	for (i = 0; i < MAX_CHARS; i++) {
+		ascii_char = morse_table[i][0]; //For example, if i=1 than the variable 'ascii_char' contains 'B'.
+		ascii_table[ascii_char] = i; // The 66-th ('B' in ASCII) element of the 'ascii_table' array contains 1,
+	}
   
-     /* Read in characters, look up series of dots and dashes in sign
-	table, output appropriate format for each dot, dash, or space. */
-     while ((ascii_char = fgetc(infile)) != EOF) {
-	  /* Ensure valid input */
-	  if (ascii_char > MAX_ASCII) {
-	       break;
-	  }
-	  /* Ignore newlines, no processing needed */
-	  else if (ascii_char == '\n') {
-	       continue;
-	  }
-	  /* Convert lowercase to uppercase */
-	  else if (ascii_char >= 'a' && ascii_char <= 'z') {
-	       ascii_char -= lower_upper_ascii_difference; 
-	  }
+	/* Read in characters, look up series of dots and dashes in sign
+		table, output appropriate format for each dot, dash, or space. */
+	while ((ascii_char = fgetc(input_file)) != EOF) {
+		/* Ensure valid input */
+		if (ascii_char > MAX_ASCII) {
+			break;
+		}
+		/* Ignore newlines, no processing needed */
+		else if (ascii_char == '\n') {
+			continue;
+		}
+		/* Convert lowercase to uppercase */
+		else if (ascii_char >= 'a' && ascii_char <= 'z') {
+			ascii_char -= lower_upper_ascii_difference; 
+		}
     
-	  /* Get morse output patterns for each component character from
-	     lookup table, so 'A' -> DOT, DASH -> ". ---" */
-	  morse_table_index = ascii_table[ascii_char];
-	  signal_code = &morse_table[morse_table_index][1];
-	  write_morse_char(outfile, waveform, frequency,
-			   unit_duration, signal_code);
-     }
+		/* Get morse output patterns for each component character from lookup table */
+		morse_table_index = ascii_table[ascii_char];
+		signal_code = &morse_table[morse_table_index][1];
+		write_morse_char(output_file, waveform, frequency, unit_duration, signal_code);
+	}
 
-     fclose(infile);
-     wavfile_close(outfile);
-     return (0);
+	fclose(input_file);
+	wavfile_close(output_file);
+	return 0;
 }
 
 
-void write_tone(FILE *outfile, short waveform[],
-		double frequency, int duration)
-{
-     int i;
-     double timepoint;
-     int volume = 32000;
-     for (i = 0; i < duration; ++i) {
-	  timepoint = (double) i / WAVFILE_SAMPLES_PER_SECOND;
-	  waveform[i] = volume * sin(frequency * timepoint * 2 * M_PI);
-     }
-     wavfile_write(outfile, waveform, duration);
-     return;
+void write_tone(FILE *outfile, short waveform[], double frequency, int duration) {
+	int i;
+	double timepoint;
+	int volume = 32000;
+	for (i = 0; i < duration; ++i) {
+		timepoint = (double) i / WAVFILE_SAMPLES_PER_SECOND;
+		waveform[i] = volume * sin(frequency * timepoint * 2 * PI);
+	}
+	wavfile_write(outfile, waveform, duration);
+	
+	return;
 }
-void write_silence(FILE *outfile, short waveform[], int duration)
-{
-     int i;
-     for (i = 0; i < duration; ++i) {
-	  waveform[i] = 0;
-     }
-     wavfile_write(outfile, waveform, duration);
-     return;
+
+
+void write_silence(FILE *output_file, short waveform[], int duration) {
+	for (int i = 0; i < duration; ++i) {
+		waveform[i] = 0;
+	}
+	wavfile_write(output_file, waveform, duration);
+
+	return;
 }
-void write_morse_char(FILE *outfile, short waveform[],
-		      double frequency, double unit_duration,
-		      int signal_code[])
-{
-     int i;
-     for (i = 0; signal_code[i] != ENDCODE; ++i) {
-	  if (signal_code[i] == WORD_SPC) {
-	       /* Write word space */
-	       write_silence(outfile, waveform, 6 * unit_duration);
-	       break;
-	  } else if (signal_code[i] == DOT) {
-	       /* Write dot */
-	       write_tone(outfile, waveform, frequency, unit_duration);
-	  } else {
-	       /* Write dash */
-	       write_tone(outfile, waveform, frequency, 3 * unit_duration);
-	  }
-	  /* Write inter-signal space */
-	  write_silence(outfile, waveform, unit_duration);
-     }
-     /* Write inter-character space */
-     write_silence(outfile, waveform, 2 * unit_duration);
-     return;
+
+
+/**
+ * Translates a character to morse code according to the morse table we defined,
+ * then writes the morse to the output .wav file given as an argument.
+ * The morse code in the .wav file will be represented as follows:
+ * 	- A dot is represented by a beep of 1 time unit.
+ * 	- A dash is represented by a beep of 3 time units.
+ * 	- A separation between morse signals of a character is represented by a silence of 1 time unit.
+ * 	- A separation between characters of the same word is represented by a silence of 2 time unit.
+ * 	- A space between words is represented by a silence of 6 time units.
+*/
+void write_morse_char(FILE *output_file, short waveform[], double frequency,
+						double unit_duration, int signal_code[]) {
+	int i;
+	for (i = 0; signal_code[i] != ENDCODE; i++) {
+		if (signal_code[i] == WORD_SPC) {
+			/* Write space between words */
+			write_silence(output_file, waveform, 6 * unit_duration);
+			break;
+		}
+		else if (signal_code[i] == DOT) {
+			/* Write dot */
+			write_tone(output_file, waveform, frequency, unit_duration);
+		}
+		else {
+			/* Write dash */
+			write_tone(output_file, waveform, frequency, 3 * unit_duration);
+		}
+		/* Write inter-signal space (between the dots and dashes that represent a character) */
+		write_silence(output_file, waveform, unit_duration);
+	}
+	/* Write inter-character space */
+	write_silence(output_file, waveform, 2 * unit_duration);
+
+	return;
 }
   
