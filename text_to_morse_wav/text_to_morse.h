@@ -1,10 +1,9 @@
-#ifndef WAVFILE_H
-#define WAVFILE_H
+#ifndef TEXT_TO_MORSE
+#define TEXT_TO_MORSE
 
 #define PI 3.14159265358979323846
 
 #include "wavfile.h"
-#include "wavfile.c"
 
 #define MAX_FILENAME 80
 #define MAX_CHARS    55
@@ -29,7 +28,7 @@ void write_morse_char(FILE *outfile, short waveform[],
 const enum { DOT, DASH, CHAR_SPC, WORD_SPC, ENDCODE } sign_type;
 
 /* Lookup table of morse signal codes */
-const int morse_table[MAX_CHARS][MAX_CHAR_SEQ + 1] = {
+int morse_table[MAX_CHARS][MAX_CHAR_SEQ + 1] = {
 	{'A', DOT, DASH, ENDCODE },
 	{'B', DASH, DOT, DOT, DOT, ENDCODE },
 	{'C', DASH, DOT, DASH, DOT, ENDCODE },

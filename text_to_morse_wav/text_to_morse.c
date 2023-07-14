@@ -20,6 +20,7 @@
 #include <math.h>
 #include <time.h>
 #include "text_to_morse.h"
+#include "wavfile.c"
 
 // In the original github repo I found, there is an option
 // for the user to set the frequency, rate, and output file name.
@@ -46,14 +47,14 @@ int main(int argc, char *argv[])
 	int lower_upper_ascii_difference = 'a' - 'A';
 
 	if (argc > 2) {
-		fprintf(stderr, "Too many arguments.\n\n %s\n", message[MSG_HELP]);
+		fprintf(stderr, "Too many arguments.\n\n");
 		exit(EXIT_FAILURE);
 	}
 	else if (argc == 2) {
 		strcpy(input_file_name, argv[1]);
 	}
 	else {
-		fprintf(stderr, "No input file specified.\n\n %s\n", message[MSG_HELP]);
+		fprintf(stderr, "No input file specified.\n\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -72,9 +73,7 @@ int main(int argc, char *argv[])
 	}
 	else {
 		fprintf(stderr,
-				"Bad format for file name %s,
-				please provide a text file (.txt extension).\n",
-				input_file_name);
+				"Bad format for file name %s, please provide a text file (.txt extension).\n", input_file_name);
 		exit(EXIT_FAILURE);
 	}
 
