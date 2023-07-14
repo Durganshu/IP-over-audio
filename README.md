@@ -27,3 +27,6 @@ turn the line 'blacklist pcspkr' to a comment using '#'.
 https://sox.sourceforge.net/sox.html
 
 https://cmusphinx.github.io/doc/pocketsphinx/simple_8c-example.html
+
+https://github.com/andrewacashner/txt2morse/tree/master
+
