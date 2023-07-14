@@ -2,4 +2,4 @@
 .vscode/
 *.o
 ./text_to_morse_wav/example_file.wav
-./text_to_morse_wav/build
+./text_to_morse_wav/build/
