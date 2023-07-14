@@ -12,11 +12,13 @@ PocketSphinx: https://cmusphinx.github.io/doc/pocketsphinx/index.html
 
 CMU Flite: http://www.festvox.org/flite/
 
+
 Might be a prequisite (as for now, works with\without it):
 
 In the file '/etc/modprobe.d/blacklist.conf',
 
 turn the line 'blacklist pcspkr' to a comment using '#'.
+
 
 ## Important references
 
