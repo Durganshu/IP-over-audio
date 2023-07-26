@@ -1,10 +1,23 @@
 # IP-over-audio
 
+--Explanation here--
+
+## Text To Morse
+
+--Explanation here--
+
+Notes:
+* if the text file specified does not exist,
+this program creates a new text file and asks the user to enter its content.
+* This program creates an audio file as well as plays it at run-time.
+
+
 ## Prerequisites
 
 Sox: sudo apt install sox
 
 Command 'paplay': sudo apt install pulseaudio-utils
+    To play an audio file, execute: paplay example_file.wav
 
 Port-Audio: http://www.portaudio.com/docs/v19-doxydocs/compile_linux.html
 
