@@ -1,8 +1,8 @@
 /**
- * A simple sound library for CSE 20211 by Douglas Thain
- * There is no need to change this file.
- * For complete documentation, see:
+ * A simple sound library by Douglas Thain:
  * http://www.nd.edu/~dthain/courses/cse20211/fall2013/wavfile
+ * 
+ * Modified to conform with our code.
 */
 
 #ifndef WAVFILE_H

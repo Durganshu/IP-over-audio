@@ -1,14 +1,14 @@
-/* text_to_morse.c -- Convert ASCII text to Morse code audio 
+/**
+ * text_to_morse.c -- Convert ASCII text to Morse code audio.
  * 
- * Based on code by Andrew A. Cashner
+ * Based on code by Andrew A. Cashner:
+ * https://github.com/andrewacashner/txt2morse/tree/master
+ * This program uses Douglas Thain's sound library:
+ * http://www.nd.edu/~dthain/course/cse20211/fall2013/wavfile
  * 
  * The program reads in text from a file,
  * converts the text to morse code,
  * and outputs the result as an audio file of the .wav extension.
- * The program uses Douglas Thain's sound library,
- * http://www.nd.edu/~dthain/course/cse20211/fall2013/wavfile
- * 
- * TODO: Add the -lm flag to Makefile in order to compile with the math library included
  */
 
 #include <stdio.h>
