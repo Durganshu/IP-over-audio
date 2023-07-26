@@ -61,8 +61,21 @@ int main(int argc, char *argv[])
 	/* Open input file */
 	input_file = fopen(input_file_name, "r");
 	if (input_file == NULL) {
-		fprintf(stderr, "Could not read file %s.\n", input_file_name);
-		exit(EXIT_FAILURE);
+		printf("\nCould not read file %s, let me create one instead.\n\n", input_file_name);
+		input_file = fopen(input_file_name, "w+");
+		if (input_file == NULL) {
+			fprintf(stderr, "Could not create file %s.\n", input_file_name);
+			exit(EXIT_FAILURE);
+		}
+
+		char command[7 + MAX_FILENAME];
+		strcpy(command, "cat >> ");
+		printf("What message would you like to send?\n\t(press [Ctrl] + [d] at the end of the message)\n");
+		
+		if (system(strcat(command, input_file_name)) < 0) {
+			fprintf(stderr, "Could not write to file %s.\n", input_file_name);
+			exit(EXIT_FAILURE);
+		}
 	}
 
 	/* Open output file, using input file name with .wav extension */
@@ -115,6 +128,15 @@ int main(int argc, char *argv[])
 
 	fclose(input_file);
 	wavfile_close(output_file);
+
+	char command[7 + MAX_FILENAME];
+	strcpy(command, "paplay ");
+	printf("\nThis is your message in morse code:\n");
+	if (system(strcat(command, output_file_name)) < 0) {
+		fprintf(stderr, "Could not play audio file %s.\n", output_file_name);
+		exit(EXIT_FAILURE);
+	}
+
 	return 0;
 }
 
