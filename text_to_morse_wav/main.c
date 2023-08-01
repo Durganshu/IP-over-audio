@@ -69,40 +69,34 @@ int morse_table[MAX_CHARS][MAX_CHAR_SEQ + 1] = {
 	{' ', WORD_SPC, ENDCODE }
 };
 
-int main(int argc, char *argv[]) 
-{
-	/* Set default values */
-	double frequency = default_frequency;
-	int rate_wpm = default_rate_wpm;
-	double unit_duration = WAVFILE_SAMPLES_PER_SECOND / default_rate_wpm;
+/* Set default values */
+double frequency = default_frequency;
+int rate_wpm = default_rate_wpm;
+double unit_duration = WAVFILE_SAMPLES_PER_SECOND / default_rate_wpm;
+/* Array of numeric values for each tone's waveform */
+int lower_upper_ascii_difference = 'a' - 'A';
 
-	FILE *input_file, *output_file, *output_text_file;
-	char input_file_name[MAX_FILENAME], output_file_name[MAX_FILENAME];
+FILE *input_file, *output_file, *output_text_file;
+char input_file_name[MAX_FILENAME], output_file_name[MAX_FILENAME];
 
-	/* Array of numeric values for each tone's waveform */
-	short waveform[MAX_SIGNAL_LENGTH];
+/* Set default values */
+double frequency;
+int rate_wpm;
+double unit_duration;
 
-	/* Lookup table indexed to ASCII codes */
-	int ascii_table[MAX_ASCII];
-	int morse_table_index;
-	int *signal_code;
 
-	int i, ascii_char;
-	int lower_upper_ascii_difference = 'a' - 'A';
+/* Array of numeric values for each tone's waveform */
+short waveform[MAX_SIGNAL_LENGTH];
+/* Lookup table indexed to ASCII codes */
+int ascii_table[MAX_ASCII];
+int morse_table_index;
+int *signal_code;
+int ascii_char;
+int lower_upper_ascii_difference;
 
-	if (argc > 2) {
-		fprintf(stderr, "Too many arguments.\n\n");
-		exit(EXIT_FAILURE);
-	}
-	else if (argc == 2) {
-		strcpy(input_file_name, argv[1]);
-	}
-	else {
-		fprintf(stderr, "No input file specified.\n\n");
-		exit(EXIT_FAILURE);
-	}
-
-	/* Open input file */
+void process_input(){
+// void process_input(FILE *input_file, char *input_file_name){
+    /* Open input file */
 	input_file = fopen(input_file_name, "r");
 	if (input_file == NULL) {
 		printf("\nCould not read file %s, let me create one instead.\n\n", input_file_name);
@@ -119,12 +113,15 @@ int main(int argc, char *argv[])
 		if (system(strcat(command, input_file_name)) < 0) {
 			fprintf(stderr, "Could not write to file %s.\n", input_file_name);
 			exit(EXIT_FAILURE);
-		}
-	}
+        }
+    }
 
-	/* Open output file, using input file name with .wav extension */
-	strcpy(output_file_name, input_file_name);
-	i = strlen(output_file_name);
+}
+
+void process_output(){
+// void process_output(FILE *output_file, char *output_file_name, char *input_file_name){
+    /* Open output file, using input file name with .wav extension */
+	int i = strlen(output_file_name);
 	if (output_file_name[i - 4] == '.') {
 		strcpy(&output_file_name[i - 3], "wav");
 	}
@@ -139,17 +136,11 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "Could not write to file %s.\n", output_file_name);
 		exit(EXIT_FAILURE);
 	}
+    output_text_file = fopen("output_text_file.txt", "w+");
+}
 
-	/* Make lookup table to access morse codes through ASCII values */
-	/* First make empty ASCII entries point to space character,
-		which is last value of morse_table */
-	for (i = 0; i < MAX_CHARS; i++) {
-		ascii_char = morse_table[i][0]; //For example, if i=1 than the variable 'ascii_char' contains 'B'.
-		ascii_table[ascii_char] = i; // The 66-th ('B' in ASCII) element of the 'ascii_table' array contains 1,
-	}
-	
-	output_text_file = fopen("output_text_file.txt", "w+");
-	/* Read in characters, look up series of dots and dashes in sign
+void create_wav_file(){
+    /* Read in characters, look up series of dots and dashes in sign
 		table, output appropriate format for each dot, dash, or space. */
 	while ((ascii_char = fgetc(input_file)) != EOF) {
 		/* Ensure valid input */
@@ -170,11 +161,133 @@ int main(int argc, char *argv[])
 		signal_code = &morse_table[morse_table_index][1];
 		write_morse_char(output_file, waveform, frequency, unit_duration, signal_code, output_text_file);
 	}
+}
 
-	fclose(input_file);
-	wavfile_close(output_file);
-	fclose(output_text_file);
+void close_files(){
+    /* Close input and output files */
+    fclose(input_file);
+    fclose(output_file);
+    fclose(output_text_file);
+}
 
+void play_output(){
+    char command[7 + MAX_FILENAME];
+	strcpy(command, "paplay ");
+	printf("\nThis is your message in morse code:\n");
+	output_text_file = fopen("output_text_file.txt", "r");
+	int ch;
+    while ((ch = fgetc(output_text_file)) != EOF) {
+        putchar(ch); // Print the character to the console (or any other output stream)
+    }
+	printf("\nPlaying the audio file...\n");
+	if (system(strcat(command, output_file_name)) < 0) {
+		fprintf(stderr, "Could not play audio file %s.\n", output_file_name);
+		exit(EXIT_FAILURE);
+	}
+    fclose(output_text_file);
+}
+
+int main(int argc, char *argv[]) 
+{
+	int i;
+
+	if (argc > 2) {
+		fprintf(stderr, "Too many arguments.\n\n");
+		exit(EXIT_FAILURE);
+	}
+	else if (argc == 2) {
+		strcpy(input_file_name, argv[1]);
+	}
+	else {
+		fprintf(stderr, "No input file specified.\n\n");
+		exit(EXIT_FAILURE);
+	}
+
+	// /* Open input file */
+	// input_file = fopen(input_file_name, "r");
+	// if (input_file == NULL) {
+	// 	printf("\nCould not read file %s, let me create one instead.\n\n", input_file_name);
+	// 	input_file = fopen(input_file_name, "w+");
+	// 	if (input_file == NULL) {
+	// 		fprintf(stderr, "Could not create file %s.\n", input_file_name);
+	// 		exit(EXIT_FAILURE);
+	// 	}
+
+	// 	char command[7 + MAX_FILENAME];
+	// 	strcpy(command, "cat >> ");
+	// 	printf("What message would you like to send?\n\t(press [Ctrl] + [d] at the end of the message)\n");
+		
+	// 	if (system(strcat(command, input_file_name)) < 0) {
+	// 		fprintf(stderr, "Could not write to file %s.\n", input_file_name);
+	// 		exit(EXIT_FAILURE);
+	// 	}
+	// }
+
+    process_input(input_file, input_file_name);
+
+    strcpy(output_file_name, input_file_name);
+
+    process_output(output_file, output_file_name, input_file_name);
+
+	// /* Open output file, using input file name with .wav extension */
+	// strcpy(output_file_name, input_file_name);
+	// i = strlen(output_file_name);
+	// if (output_file_name[i - 4] == '.') {
+	// 	strcpy(&output_file_name[i - 3], "wav");
+	// }
+	// else {
+	// 	fprintf(stderr,
+	// 			"Bad format for file name %s, please provide a text file (.txt extension).\n", input_file_name);
+	// 	exit(EXIT_FAILURE);
+	// }
+
+	// output_file = wavfile_open(output_file_name);
+	// if (output_file == NULL) {
+	// 	fprintf(stderr, "Could not write to file %s.\n", output_file_name);
+	// 	exit(EXIT_FAILURE);
+	// }
+
+	/* Make lookup table to access morse codes through ASCII values */
+	/* First make empty ASCII entries point to space character,
+		which is last value of morse_table */
+	for (i = 0; i < MAX_CHARS; i++) {
+		ascii_char = morse_table[i][0]; //For example, if i=1 than the variable 'ascii_char' contains 'B'.
+		ascii_table[ascii_char] = i; // The 66-th ('B' in ASCII) element of the 'ascii_table' array contains 1,
+	}
+	
+	// output_text_file = fopen("output_text_file.txt", "w+");
+    create_wav_file();
+	// /* Read in characters, look up series of dots and dashes in sign
+	// 	table, output appropriate format for each dot, dash, or space. */
+	// while ((ascii_char = fgetc(input_file)) != EOF) {
+	// 	/* Ensure valid input */
+	// 	if (ascii_char > MAX_ASCII) {
+	// 		break;
+	// 	}
+	// 	/* Ignore newlines, no processing needed */
+	// 	else if (ascii_char == '\n') {
+	// 		continue;
+	// 	}
+	// 	/* Convert lowercase to uppercase */
+	// 	else if (ascii_char >= 'a' && ascii_char <= 'z') {
+	// 		ascii_char -= lower_upper_ascii_difference; 
+	// 	}
+    
+	// 	/* Get morse output patterns for each component character from lookup table */
+	// 	morse_table_index = ascii_table[ascii_char];
+	// 	signal_code = &morse_table[morse_table_index][1];
+	// 	write_morse_char(output_file, waveform, frequency, unit_duration, signal_code, output_text_file);
+	// }
+
+    // Cleanup
+    close_files();
+
+	// fclose(input_file);
+	// wavfile_close(output_file);
+	// fclose(output_text_file);
+    system("paplay hello.wav");
+    // /* Play audio file */
+    // play_output();
 	char command[7 + MAX_FILENAME];
 	strcpy(command, "paplay ");
 	printf("\nThis is your message in morse code:\n");
@@ -184,6 +297,7 @@ int main(int argc, char *argv[])
         putchar(ch); // Print the character to the console (or any other output stream)
     }
 	printf("\nPlaying the audio file...\n");
+    
 	if (system(strcat(command, output_file_name)) < 0) {
 		fprintf(stderr, "Could not play audio file %s.\n", output_file_name);
 		exit(EXIT_FAILURE);
