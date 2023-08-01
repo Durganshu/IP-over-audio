@@ -36,7 +36,7 @@ void write_silence(FILE *outfile, short waveform[], int duration);
 
 void write_morse_char(FILE *outfile, short waveform[],
 		      double frequency, double unit_duration,
-		      int signal_code[]);
+		      int signal_code[], FILE *output_text_file);
 
 const enum { DOT, DASH, CHAR_SPC, WORD_SPC, ENDCODE } sign_type;
 

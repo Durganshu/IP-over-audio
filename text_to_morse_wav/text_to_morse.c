@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 	int rate_wpm = default_rate_wpm;
 	double unit_duration = WAVFILE_SAMPLES_PER_SECOND / default_rate_wpm;
 
-	FILE *input_file, *output_file;
+	FILE *input_file, *output_file, *output_text_file;
 	char input_file_name[MAX_FILENAME], output_file_name[MAX_FILENAME];
 
 	/* Array of numeric values for each tone's waveform */
@@ -103,7 +103,8 @@ int main(int argc, char *argv[])
 		ascii_char = morse_table[i][0]; //For example, if i=1 than the variable 'ascii_char' contains 'B'.
 		ascii_table[ascii_char] = i; // The 66-th ('B' in ASCII) element of the 'ascii_table' array contains 1,
 	}
-  
+	
+	output_text_file = fopen("output_text_file.txt", "w+");
 	/* Read in characters, look up series of dots and dashes in sign
 		table, output appropriate format for each dot, dash, or space. */
 	while ((ascii_char = fgetc(input_file)) != EOF) {
@@ -123,15 +124,22 @@ int main(int argc, char *argv[])
 		/* Get morse output patterns for each component character from lookup table */
 		morse_table_index = ascii_table[ascii_char];
 		signal_code = &morse_table[morse_table_index][1];
-		write_morse_char(output_file, waveform, frequency, unit_duration, signal_code);
+		write_morse_char(output_file, waveform, frequency, unit_duration, signal_code, output_text_file);
 	}
 
 	fclose(input_file);
 	wavfile_close(output_file);
+	fclose(output_text_file);
 
 	char command[7 + MAX_FILENAME];
 	strcpy(command, "paplay ");
 	printf("\nThis is your message in morse code:\n");
+	output_text_file = fopen("output_text_file.txt", "r");
+	int ch;
+    while ((ch = fgetc(output_text_file)) != EOF) {
+        putchar(ch); // Print the character to the console (or any other output stream)
+    }
+	printf("\nPlaying the audio file...\n");
 	if (system(strcat(command, output_file_name)) < 0) {
 		fprintf(stderr, "Could not play audio file %s.\n", output_file_name);
 		exit(EXIT_FAILURE);
@@ -176,27 +184,32 @@ void write_silence(FILE *output_file, short waveform[], int duration) {
  * 	- A space between words is represented by a silence of 6 time units.
 */
 void write_morse_char(FILE *output_file, short waveform[], double frequency,
-						double unit_duration, int signal_code[]) {
+						double unit_duration, int signal_code[], FILE *output_text_file) {
 	int i;
 	for (i = 0; signal_code[i] != ENDCODE; i++) {
 		if (signal_code[i] == WORD_SPC) {
 			/* Write space between words */
 			write_silence(output_file, waveform, 6 * unit_duration);
+			fprintf(output_text_file, "/");
 			break;
 		}
 		else if (signal_code[i] == DOT) {
 			/* Write dot */
 			write_tone(output_file, waveform, frequency, unit_duration);
+			fprintf(output_text_file, ".");
 		}
 		else {
 			/* Write dash */
 			write_tone(output_file, waveform, frequency, 3 * unit_duration);
+			fprintf(output_text_file, "-");
 		}
 		/* Write inter-signal space (between the dots and dashes that represent a character) */
 		write_silence(output_file, waveform, unit_duration);
+
 	}
 	/* Write inter-character space */
 	write_silence(output_file, waveform, 2 * unit_duration);
+	fprintf(output_text_file, " ");
 
 	return;
 }
