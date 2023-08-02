@@ -1,16 +1,3 @@
-/**
- * text_to_morse.c -- Convert ASCII text to Morse code audio.
- * 
- * Based on code by Andrew A. Cashner:
- * https://github.com/andrewacashner/txt2morse/tree/master
- * This program uses Douglas Thain's sound library:
- * http://www.nd.edu/~dthain/course/cse20211/fall2013/wavfile
- * 
- * The program reads in text from a file,
- * converts the text to morse code,
- * and outputs the result as an audio file of the .wav extension.
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -22,8 +9,6 @@
 #include "text_to_morse.h"
 const enum sign_type_enum sign_type = DOT;
 
-// In the original github repo I found, there is an option
-// for the user to set the frequency, rate, and output file name.
 
 void write_tone(FILE *outfile, short waveform[], double frequency, int duration) {
 	int i;
@@ -48,17 +33,6 @@ void write_silence(FILE *output_file, short waveform[], int duration) {
 	return;
 }
 
-
-/**
- * Translates a character to morse code according to the morse table we defined,
- * then writes the morse to the output .wav file given as an argument.
- * The morse code in the .wav file will be represented as follows:
- * 	- A dot is represented by a beep of 1 time unit.
- * 	- A dash is represented by a beep of 3 time units.
- * 	- A separation between morse signals of a character is represented by a silence of 1 time unit.
- * 	- A separation between characters of the same word is represented by a silence of 2 time unit.
- * 	- A space between words is represented by a silence of 6 time units.
-*/
 void write_morse_char(FILE *output_file, short waveform[], double frequency,
 						double unit_duration, int signal_code[], FILE *output_text_file) {
 	int i;

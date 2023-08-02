@@ -1,5 +1,6 @@
 #ifndef MORSE_CORE_H
 #define MORSE_CORE_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -30,18 +31,18 @@ struct Parameters {
     int ascii_char;
 };
 
+extern struct Parameters params;
 
-// void initialize_params();
+void initialize_params();
 
+void process_input();
 
-// void process_input();
+void process_output();
 
-// void process_output();
+void create_wav_file();
 
-// void create_wav_file();
+void close_files();
 
-// void close_files();
-
-// void play_output();
+void play_output();
 
 #endif

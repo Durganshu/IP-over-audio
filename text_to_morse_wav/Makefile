@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra
-SRCS       = main.c text_to_morse.c text_to_morse.h wavfile.c wavfile.h
+SRCS       = main.c morse_core.c text_to_morse.c text_to_morse.h wavfile.c wavfile.h
 build_dir 	= build
 target	  	= $(build_dir)/test_code
 OBJS = $(SRCS:.c=.o)
