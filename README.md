@@ -43,3 +43,5 @@ https://cmusphinx.github.io/doc/pocketsphinx/simple_8c-example.html
 
 https://github.com/andrewacashner/txt2morse/tree/master
 
+A webpage to validate Morse codes: https://cryptii.com/pipes/morse-code-translator
+
