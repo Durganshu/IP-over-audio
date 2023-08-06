@@ -17,6 +17,7 @@ this program creates a new text file and asks the user to enter its content.
 Sox: sudo apt install sox
 
 Command 'paplay': sudo apt install pulseaudio-utils
+    
     To play an audio file, execute: paplay example_file.wav
 
 Port-Audio: http://www.portaudio.com/docs/v19-doxydocs/compile_linux.html
