@@ -72,7 +72,7 @@ int main() {
         }
         if (sum>samples_group*50) new_data[j] = 1;
         else new_data[j] = 0;
-        printf("Newdata : %d \n", new_data[j]);
+        // printf("Newdata : %d \n", new_data[j]);
     }
 
     // detecting minimal sequence of 0 (for letter pause) and 1 (for dot)
