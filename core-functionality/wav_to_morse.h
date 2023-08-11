@@ -29,7 +29,6 @@ struct ConversionParameters{
     int new_data_count;
     short x;
     FILE* file;
-
 };
 
 int detect_morse(double* pcm_data, int num_samples);

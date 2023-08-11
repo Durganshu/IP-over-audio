@@ -28,6 +28,7 @@ int main(int argc, char *argv[])
     play_output();
 
 	printf("Now reading wav file:\n");
+	
 	read_Wav_file();
 
     convert_Wav_to_morse();
