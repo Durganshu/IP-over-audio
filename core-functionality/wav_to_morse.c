@@ -3,18 +3,31 @@
 
 #include "wav_to_morse.h"
 
-int detect_morse(double* pcm_data, int num_samples) {
-    // Perform signal processing (e.g., FFT, peak detection) to detect Morse code pulses or tones
-    // Here, we assume the Morse code pulses are represented as "1" and "0" otherwise.
-    int i;
-    for (i = 0; i < num_samples; i++) {
-        if (pcm_data[i] > THRESHOLD)
-            printf("1");
-        else
-            printf("0");
-    }
+const char *morseTable[][2] = {
+    {"A", ".-"},     {"B", "-..."},   {"C", "-.-."},
+    {"D", "-.."},    {"E", "."},      {"F", "..-."},
+    {"G", "--."},    {"H", "...."},    {"I", ".."},
+    {"J", ".---"},   {"K", "-.-"},     {"L", ".-.."},
+    {"M", "--"},     {"N", "-."},      {"O", "---"},
+    {"P", ".--."},   {"Q", "--.-"},    {"R", ".-."},
+    {"S", "..."},    {"T", "-"},       {"U", "..-"},
+    {"V", "...-"},   {"W", ".--"},     {"X", "-..-"},
+    {"Y", "-.--"},   {"Z", "--.."},
+    {"0", "-----"},  {"1", ".----"},   {"2", "..---"},
+    {"3", "...--"},  {"4", "....-"},   {"5", "....."},
+    {"6", "-...."},  {"7", "--..."},   {"8", "---.."},
+    {"9", "----."},
+    {".", ".-.-.-"}, {",", "--..--"},  {"?", "..--.."},
+    {"!", "-.-.--"}, {" ", " "}, 
+    {"", NULL}  // Null-terminated entry to indicate the end of the array
+};
 
-    return 0;
+
+char* decode(char* s){
+	for (int i=0; morseTable[i][1] != NULL; i++){
+		if (strcmp(s, morseTable[i][1]) ==0) return morseTable[i][0];
+	}
+return "";
 }
 
 
@@ -23,64 +36,73 @@ void wav_to_morse(struct ConversionParameters param, struct WavHeader head)
     int new_data[param.new_data_count];
     
     // converts samples to 0, 1
-    for (int j = 0; j<param.new_data_count; j++) {
+    for (int j = 0; j<new_data_count; j++) {
         int sum=0;
-        for (int i = 0; i < param.samples_group; i++) {
-            fread(&param.x, head.bytes_by_capture, 1, param.file);
-            if (param.x > 0) sum += param.x;
-            else sum -= param.x;
+        for (int i = 0; i < samples_group; i++) {
+            fread(&x, header.bytes_by_capture, 1, file);
+            if (x > 0) sum += x;
+            else sum -= x;
         }
-        if (sum>param.samples_group*50) new_data[j] = 1;
+        if (sum>samples_group*50) new_data[j] = 1;
         else new_data[j] = 0;
+        //printf(" %d", new_data[j]);
     }
 
     // detecting minimal sequence of 0 (for letter pause) and 1 (for dot)
     // maximum sequence of 1 (for dash)
     int min[2];
     int max[2];
-    param.x = new_data[0];
+
+    x = new_data[0];
     int count = 0;
-    for (int j = 0; j<param.new_data_count; j++) {
-        if (new_data[j] == param.x) count++;
+    for (int j = 0; j<new_data_count; j++) {
+        if (new_data[j] == x) count++;
         else {
-            if (count>max[param.x]) max[param.x] = count;
-            if (count<min[param.x]) min[param.x] = count;
+            if (count>max[x]) max[x] = count;
+            if (count<min[x] || min[x] ==0) min[x] = count;
             count = 1;
-            param.x = new_data[j];
+            x = new_data[j];
         }
     }
     int pause_letter = 2*min[0]-1;
     int pause_word = max[0] - min[0];
     int dash = (max[1]+min[1])/2;
 
-    param.x = new_data[0];
+    x = new_data[0];
     count = 0;
-
-    for (int j = 0; j<param.new_data_count; j++) {
-        if (new_data[j] == param.x) count++;
+	char word[6] = "";
+	char* sentence = (char*)malloc((1024) * sizeof(char));
+	
+    for (int j = 0; j<new_data_count; j++) {
+        if (new_data[j] == x) count++;
         else {
-            if (param. x==1){
+            if (x==1){
                 if (count>dash){
-                    printf("-");
+                    //printf("-");
+					strcat(word, "-");
                 }
                 else{
-                    printf(".");
+                    //printf(".");
+					strcat(word, ".");
                 }
             }
             else{
                 if (count>pause_letter){
-                    //new word
-                    printf(" ");
+                    //new morse word (text letter)
+					strcat(sentence, decode(word));
+					word[0] = '\0';
                 }
                 if (count>pause_word){
-                    // new sentence
-                    printf(" \n");
+                    // new sentence (text word)
+					strcat(sentence, " ");
                 }
             }
             count = 1;
-            param.x =  new_data[j];
+            x =  new_data[j];
         }
     }
+	printf("The wave file says: %s \n", sentence);
+	free(sentence);
 }
 
 
