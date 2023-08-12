@@ -13,7 +13,7 @@ int recvFile(char* buf, int s){
 }
 
 
-int udp_server_operations() {
+int start_udp_server() {
     int sockfd;
     char buffer[BUFFER_SIZE];
     struct sockaddr_in servaddr, cliaddr;
@@ -66,6 +66,7 @@ int udp_server_operations() {
 		//	break;
 		//}
     }
+    // TODO: Add a code to send response to client
 	fclose(fp);
 	printf("File received!\n");
 		

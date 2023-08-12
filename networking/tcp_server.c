@@ -1,7 +1,7 @@
 #include "networking.h"
 
 
-int main() {
+int start_tcp_server() {
     int server_socket, client_socket;
     struct sockaddr_in server_addr, client_addr;
     socklen_t addr_len = sizeof(client_addr);
@@ -43,7 +43,7 @@ int main() {
     printf("Connection accepted from %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 
     // Receive the WAV file data from the client and save it to a file
-    received_file = fopen("received_file.wav", "wb");
+    received_file = fopen("received.wav", "wb");
     if (!received_file) {
         perror("Error opening file for writing");
         exit(EXIT_FAILURE);
@@ -56,6 +56,7 @@ int main() {
 
     fclose(received_file);
     printf("File received and saved as received_file.wav\n");
+    // TODO: Add a code to send response to client
 
     close(client_socket);
     close(server_socket);

@@ -16,7 +16,7 @@ int readFile(FILE* fp, char* buf, int s)
 }
 
 
-int udp_client_operations(char audio_file[], char ip_address[]) {
+int start_udp_client(char audio_file[], char ip_address[]) {
     int sockfd;
     struct sockaddr_in serverAddr;
 
@@ -62,6 +62,7 @@ int udp_client_operations(char audio_file[], char ip_address[]) {
     if (fp != NULL)
         fclose(fp);
 	
+    // TODO: Add a code to listen to response from server
 	close(sockfd);
     return 0;
 }

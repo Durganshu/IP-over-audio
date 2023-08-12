@@ -14,7 +14,7 @@ void send_file(FILE *file, int client_socket) {
     }
 }
 
-int main() {
+int start_tcp_client(char text_file[], char ip_address[]) {
     int client_socket;
     struct sockaddr_in server_addr;
     FILE *file;
@@ -29,7 +29,7 @@ int main() {
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(PORT);
 
-    if (inet_pton(AF_INET, SERVER_IP, &server_addr.sin_addr) <= 0) {
+    if (inet_pton(AF_INET, ip_address, &server_addr.sin_addr) <= 0) {
         perror("Invalid address/Address not supported");
         exit(EXIT_FAILURE);
     }
@@ -40,10 +40,10 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    printf("Connected to the server at %s:%d\n", SERVER_IP, PORT);
+    printf("Connected to the server at %s:%d\n", ip_address, PORT);
 
     // Open the WAV file to be sent
-    file = fopen("example_file.wav", "rb");
+    file = fopen(text_file, "rb");
     if (!file) {
         perror("Error opening the WAV file");
         exit(EXIT_FAILURE);
@@ -51,7 +51,8 @@ int main() {
 
     // Send the WAV file to the server
     send_file(file, client_socket);
-
+    
+    // TODO: Add a code to listen to response from server
     fclose(file);
     printf("File sent successfully.\n");
 
