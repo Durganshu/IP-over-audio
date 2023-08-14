@@ -5,28 +5,6 @@ int main(int argc, char *argv[])
 	
 	initialize_params(argc, argv);
 
-	/**
-	 * TODO:
-	 * 
-	 * If the user chose to be a client,
-	 * they need to provide a file name and ip address to send the output to.
-	 * 
-	 * If it's in udp, call the function:
-	 * start_udp_client(audio_file_name, ip_address)
-	 * 
-	 * If it's in tcp, call the function:
-	 * start_tcp_client(text_file_name, ip_address)
-	 * 
-	 * 
-	 * If the user chose to be a server -
-	 * 
-	 * If it's in udp, call the function:
-	 * start_udp_server()
-	 * 
-	 * If it's in tcp, call the function:
-	 * start_tcp_server()
-	*/
-
     process_input();
 
     strcpy(params.output_file_name, params.input_file_name);
