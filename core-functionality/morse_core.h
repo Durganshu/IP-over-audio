@@ -11,7 +11,7 @@
 #include <time.h>
 #include "text_to_wav.h"
 #include "wav_to_morse.h"
-struct Parameters {
+typedef struct {
     /* Set default values */
     double frequency;
     int rate_wpm;
@@ -29,9 +29,9 @@ struct Parameters {
     int morse_table_index;
     int *signal_code;
     int ascii_char;
-};
+} Parameters;
 
-extern struct Parameters params;
+extern Parameters params;
 
 void initialize_params();
 
@@ -48,9 +48,9 @@ void play_output();
 /****************************************************************/
 // For extracting information from the WAV file
 
-extern struct WavHeader header;
+extern WavHeader header;
 
-extern struct ConversionParameters convParams;
+extern ConversionParameters convParams;
 
 void read_Wav_file();
 

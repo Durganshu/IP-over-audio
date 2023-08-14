@@ -31,7 +31,7 @@ return "";
 }
 
 
-void wav_to_morse(struct ConversionParameters param, struct WavHeader head)
+void wav_to_morse(ConversionParameters param, WavHeader head)
 {
     int new_data[param.new_data_count];
     short x;
