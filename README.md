@@ -12,6 +12,31 @@ this program creates a new text file and asks the user to enter its content.
 * This program creates an audio file as well as plays it at run-time.
 
 
+
+
+# A simple client and server for sending and receiving wav files
+
+## Build instructions
+
+```shell
+cd client
+gcc client.c -o client
+```
+
+```shell
+cd server
+gcc server.c -o server
+```
+
+## Run instructions
+
+```shell
+shell1$> ./server
+shell2$> ./client
+
+
+
+
 ## Prerequisites
 
 Sox: sudo apt install sox

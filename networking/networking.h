@@ -1,7 +1,7 @@
 #ifndef NETWORKING_H
 #define NETWORKING_H
 
-
+// TODO: Create a networking makefile?
 #define BUFFER_SIZE 1024
 #define PORT 54321
 #define ERROR 1

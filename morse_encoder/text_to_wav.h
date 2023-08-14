@@ -12,7 +12,7 @@
 
 #define PI 3.14159265358979323846
 
-#include "wavfile.h"
+#include "../core_functionality/wavfile.h"
 
 #define MAX_FILENAME 80
 #define MAX_CHARS    55
