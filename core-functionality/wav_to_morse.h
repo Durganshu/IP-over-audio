@@ -31,7 +31,7 @@ struct ConversionParameters{
     FILE* file;
 };
 
-int detect_morse(double* pcm_data, int num_samples);
+char* decode(char* s);
 
 // void wav_to_morse(struct ConversionParameters *param, struct WavHeader *head);
 void wav_to_morse(struct ConversionParameters param, struct WavHeader head);

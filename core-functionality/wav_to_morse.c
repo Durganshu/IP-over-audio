@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-
+#include <stdlib.h>
 #include "wav_to_morse.h"
 
 const char *morseTable[][2] = {
@@ -18,7 +18,7 @@ const char *morseTable[][2] = {
     {"6", "-...."},  {"7", "--..."},   {"8", "---.."},
     {"9", "----."},
     {".", ".-.-.-"}, {",", "--..--"},  {"?", "..--.."},
-    {"!", "-.-.--"}, {" ", " "}, 
+    {"!", "-.-.--"}, {" ", " "}, {"'",".----."},
     {"", NULL}  // Null-terminated entry to indicate the end of the array
 };
 
@@ -34,28 +34,28 @@ return "";
 void wav_to_morse(struct ConversionParameters param, struct WavHeader head)
 {
     int new_data[param.new_data_count];
-    
+    short x;
     // converts samples to 0, 1
-    for (int j = 0; j<new_data_count; j++) {
+    for (int j = 0; j<param.new_data_count; j++) {
         int sum=0;
-        for (int i = 0; i < samples_group; i++) {
-            fread(&x, header.bytes_by_capture, 1, file);
+        for (int i = 0; i < param.samples_group; i++) {
+            fread(&x, head.bytes_by_capture, 1, param.file);
             if (x > 0) sum += x;
             else sum -= x;
         }
-        if (sum>samples_group*50) new_data[j] = 1;
+        if (sum>param.samples_group*50) new_data[j] = 1;
         else new_data[j] = 0;
         //printf(" %d", new_data[j]);
     }
 
     // detecting minimal sequence of 0 (for letter pause) and 1 (for dot)
     // maximum sequence of 1 (for dash)
-    int min[2];
-    int max[2];
+    int min[2] = {0 ,0};
+    int max[2]= {0 ,0};
 
     x = new_data[0];
     int count = 0;
-    for (int j = 0; j<new_data_count; j++) {
+    for (int j = 0; j<param.new_data_count; j++) {
         if (new_data[j] == x) count++;
         else {
             if (count>max[x]) max[x] = count;
@@ -72,27 +72,34 @@ void wav_to_morse(struct ConversionParameters param, struct WavHeader head)
     count = 0;
 	char word[6] = "";
 	char* sentence = (char*)malloc((1024) * sizeof(char));
-	
-    for (int j = 0; j<new_data_count; j++) {
-        if (new_data[j] == x) count++;
+    memset(sentence, 0, sizeof(char));
+
+    for (int j = 0; j<param.new_data_count; j++) {
+        if (new_data[j] == x)
+        {
+            count++;
+        }
         else {
             if (x==1){
                 if (count>dash){
-                    //printf("-");
+                    // printf("-");
 					strcat(word, "-");
                 }
                 else{
-                    //printf(".");
+                    // printf(".");
 					strcat(word, ".");
                 }
             }
             else{
                 if (count>pause_letter){
                     //new morse word (text letter)
+                    // printf(" ");
+                    // printf("Word %s \n", word);
 					strcat(sentence, decode(word));
 					word[0] = '\0';
                 }
                 if (count>pause_word){
+                    // printf(" \n");
                     // new sentence (text word)
 					strcat(sentence, " ");
                 }
