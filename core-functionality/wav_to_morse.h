@@ -6,7 +6,7 @@
 #define THRESHOLD 0.5 // Adjust this threshold according to your audio
 #include <stdio.h>
 
-struct WavHeader{
+typedef struct {
     char   id[4];            // should always contain "RIFF"
     int    totallength;      // total file length minus 8
     char   wavefmt[8];       // should be "WAVEfmt "
@@ -19,22 +19,19 @@ struct WavHeader{
     short  bits_per_sample;
     char   data[4];          // should always contain "data"
     int    bytes_in_data;
-};
+}WavHeader;
 
-struct ConversionParameters{
-    int sample_rate;
-    int num_samples;
-    double* pcm_data;
+typedef struct {
+
     int samples_group;
     int new_data_count;
-    short x;
     FILE* file;
-};
+}ConversionParameters;
 
-int detect_morse(double* pcm_data, int num_samples);
+char* decode(char* s);
 
 // void wav_to_morse(struct ConversionParameters *param, struct WavHeader *head);
-void wav_to_morse(struct ConversionParameters param, struct WavHeader head);
+void wav_to_morse(ConversionParameters param, WavHeader head);
 
 
 #endif

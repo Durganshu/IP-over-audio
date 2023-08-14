@@ -61,7 +61,7 @@ int morse_table[MAX_CHARS][MAX_CHAR_SEQ + 1] = {
 	{' ', WORD_SPC, ENDCODE }
 };
 
-struct Parameters params;
+Parameters params;
 
 void initialize_params(int argc, char *argv[]){
     
@@ -182,10 +182,9 @@ void play_output(){
 /****************************************************************/
 // For extracting information from the WAV file
 
-struct WavHeader header;
+WavHeader header;
 
-struct ConversionParameters convParams;
-
+ConversionParameters convParams;
 
 void read_Wav_file(){
 
@@ -193,7 +192,7 @@ void read_Wav_file(){
     convParams.file = fopen(filename, "rb");
     if (!convParams.file) {
         printf("Error opening file\n");
-        return 1;
+        exit(0);
     }
 
     // Read WAV file header
