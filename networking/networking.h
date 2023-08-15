@@ -28,6 +28,7 @@ int start_udp_client(char audio_file[], char ip_address[]);
 
 // TCP:
 int start_tcp_server();
+#define SERVER_RECEIVED "The server has received the message"
 
 void send_file(FILE *file, int client_socket);
 int start_tcp_client(char text_file[], char ip_address[]);

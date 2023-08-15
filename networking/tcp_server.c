@@ -55,9 +55,13 @@ int start_tcp_server() {
     }
 
     fclose(received_file);
-    printf("File received and saved as received_file.wav\n");
-    // TODO: Add a code to send response to client
+    printf("File received and saved as 'received_file.wav'\n");
 
+    if (send(client_socket, SERVER_RECEIVED, strlen(SERVER_RECEIVED), 0) < 0){
+        printf("Couldn't send the response to the client\n");
+        return -1;
+    }
+    
     close(client_socket);
     close(server_socket);
 

@@ -52,9 +52,19 @@ int start_tcp_client(char text_file[], char ip_address[]) {
     // Send the WAV file to the server
     send_file(file, client_socket);
     
-    // TODO: Add a code to listen to response from server
     fclose(file);
     printf("File sent successfully.\n");
+
+    // Receive the server's response:
+    char response[BUFFER_SIZE];
+    memset(response, 0, BUFFER_SIZE);
+    if(recv(client_socket, response, sizeof(response), 0) < 0){
+        printf("Error while receiving server's response\n");
+        return -1;
+    }
+    
+    printf("Server's response: %s\n",response);
+    
 
     close(client_socket);
 
