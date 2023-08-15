@@ -63,6 +63,11 @@ int start_udp_client(char audio_file[], char ip_address[]) {
         fclose(fp);
 	
     // TODO: Add a code to listen to response from server
+	n = recvfrom(sockfd, (char *)buffer, BUFFER_SIZE, 
+                MSG_WAITALL, (struct sockaddr *) &serverAddr,
+                &len);
+	buffer[n] = '\0'; // Null-terminate the received message
+	printf("Received message: %s\n", buffer);
 	close(sockfd);
     return 0;
 }
