@@ -1,12 +1,41 @@
 #include "networking.h"
 
 
+void receive_message(int server_socket) {
+    FILE *received_file;
+    char buffer[BUFFER_SIZE];
+
+    // Receive the WAV file data from the client and save it to a file
+    received_file = fopen("received.wav", "wb");
+    if (!received_file) {
+        perror("Error opening file for writing");
+        exit(EXIT_FAILURE);
+    }
+
+    int bytes_received;
+    while ((bytes_received = recv(server_socket, buffer, BUFFER_SIZE, 0)) > 0) {
+        fwrite(buffer, 1, bytes_received, received_file);
+    }
+
+    fclose(received_file);
+    printf("File received and saved as 'received.wav'\n");
+
+    send_response(server_socket);
+}
+
+
+void send_response(int server_socket){
+    if (send(server_socket, SERVER_RECEIVED, strlen(SERVER_RECEIVED), 0) < 0){
+        printf("Couldn't send the response to the client\n");
+        return -1;
+    }
+}
+
+
 int start_tcp_server() {
-    int server_socket, client_socket;
+    int server_socket;
     struct sockaddr_in server_addr, client_addr;
     socklen_t addr_len = sizeof(client_addr);
-    char buffer[BUFFER_SIZE];
-    FILE *received_file;
 
     // Create a server socket
     server_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -34,36 +63,19 @@ int start_tcp_server() {
     printf("Server listening on port %d...\n", PORT);
 
     // Accept a connection from a client
-    client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &addr_len);
-    if (client_socket < 0) {
+    server_socket = accept(server_socket, (struct sockaddr *)&client_addr, &addr_len);
+    if (server_socket < 0) {
         perror("Accept failed");
         exit(EXIT_FAILURE);
     }
 
     printf("Connection accepted from %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
-
-    // Receive the WAV file data from the client and save it to a file
-    received_file = fopen("received.wav", "wb");
-    if (!received_file) {
-        perror("Error opening file for writing");
-        exit(EXIT_FAILURE);
-    }
-
-    int bytes_received;
-    while ((bytes_received = recv(client_socket, buffer, BUFFER_SIZE, 0)) > 0) {
-        fwrite(buffer, 1, bytes_received, received_file);
-    }
-
-    fclose(received_file);
-    printf("File received and saved as 'received_file.wav'\n");
-
-    if (send(client_socket, SERVER_RECEIVED, strlen(SERVER_RECEIVED), 0) < 0){
-        printf("Couldn't send the response to the client\n");
-        return -1;
-    }
-    
-    close(client_socket);
-    close(server_socket);
+    receive_message(server_socket);
 
     return 0;
+}
+
+
+void shutdown_connection(int server_socket) {
+    close(server_socket);
 }

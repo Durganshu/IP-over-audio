@@ -12,7 +12,34 @@ void send_file(FILE *file, int client_socket) {
             exit(EXIT_FAILURE);
         }
     }
+    printf("File sent successfully.\n");    
+
+    receive_server_response(client_socket);
 }
+
+
+void receive_server_response(int client_socket) {
+    // Receive the server's response:
+    char response[BUFFER_SIZE];
+    memset(response, 0, BUFFER_SIZE);
+    FILE *response_file;
+
+    response_file = fopen("response.txt", "wb");
+    if (!response_file) {
+        perror("Error opening file for writing");
+        exit(EXIT_FAILURE);
+    }
+
+    int bytes_received;
+    while ((bytes_received = recv(client_socket, response, BUFFER_SIZE, 0)) > 0) {
+        fwrite(response, 1, bytes_received, response_file);
+    }
+
+    fclose(response_file);
+    printf("Server's response: %s\n", response);
+    printf("Response from server received and saved as 'response.txt'\n");
+}
+
 
 int start_tcp_client(char text_file[], char ip_address[]) {
     int client_socket;
@@ -50,23 +77,13 @@ int start_tcp_client(char text_file[], char ip_address[]) {
     }
 
     // Send the WAV file to the server
-    send_file(file, client_socket);
-    
+    send_file(file, client_socket);    
     fclose(file);
-    printf("File sent successfully.\n");
-
-    // Receive the server's response:
-    char response[BUFFER_SIZE];
-    memset(response, 0, BUFFER_SIZE);
-    if(recv(client_socket, response, sizeof(response), 0) < 0){
-        printf("Error while receiving server's response\n");
-        return -1;
-    }
-    
-    printf("Server's response: %s\n",response);
-    
-
-    close(client_socket);
 
     return 0;
+}
+
+
+void shutdown_connection(int client_socket) {
+    close(client_socket);
 }

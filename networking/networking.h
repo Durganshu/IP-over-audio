@@ -27,11 +27,15 @@ int start_udp_client(char audio_file[], char ip_address[]);
 
 
 // TCP:
+void receive_message(int server_socket);
+void send_response(int server_socket);
 int start_tcp_server();
-#define SERVER_RECEIVED "The server has received the message"
+void shutdown_connection(int server_socket);
+#define SERVER_RECEIVED "The server has received your message.\n"
 
 void send_file(FILE *file, int client_socket);
+void receive_server_response(int client_socket);
 int start_tcp_client(char text_file[], char ip_address[]);
-
+void shutdown_connection(int client_socket);
 
 #endif
