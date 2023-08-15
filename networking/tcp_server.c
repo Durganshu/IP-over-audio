@@ -1,37 +1,6 @@
 #include "networking.h"
 
 
-void receive_message(int server_socket) {
-    FILE *received_file;
-    char buffer[BUFFER_SIZE];
-
-    // Receive the WAV file data from the client and save it to a file
-    received_file = fopen("received.wav", "wb");
-    if (!received_file) {
-        perror("Error opening file for writing");
-        exit(EXIT_FAILURE);
-    }
-
-    int bytes_received;
-    while ((bytes_received = recv(server_socket, buffer, BUFFER_SIZE, 0)) > 0) {
-        fwrite(buffer, 1, bytes_received, received_file);
-    }
-
-    fclose(received_file);
-    printf("File received and saved as 'received.wav'\n");
-
-    send_response(server_socket);
-}
-
-
-void send_response(int server_socket){
-    if (send(server_socket, SERVER_RECEIVED, strlen(SERVER_RECEIVED), 0) < 0){
-        printf("Couldn't send the response to the client\n");
-        return -1;
-    }
-}
-
-
 int start_tcp_server() {
     int server_socket;
     struct sockaddr_in server_addr, client_addr;

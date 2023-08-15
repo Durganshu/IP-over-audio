@@ -31,7 +31,7 @@ void receive_message(int server_socket);
 void send_response(int server_socket);
 int start_tcp_server();
 void shutdown_connection(int server_socket);
-#define SERVER_RECEIVED "The server has received your message.\n"
+#define RECEIVED_VALIDATION "The server has received your message.\n"
 
 void send_file(FILE *file, int client_socket);
 void receive_server_response(int client_socket);
