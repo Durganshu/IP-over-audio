@@ -63,21 +63,10 @@ int morse_table[MAX_CHARS][MAX_CHAR_SEQ + 1] = {
 
 Parameters params;
 
-void initialize_params(int argc, char *argv[]){
-    
-    if (argc > 2) {
-		fprintf(stderr, "Too many arguments.\n\n");
-		exit(EXIT_FAILURE);
-	}
-	else if (argc == 2) {
-		strcpy(params.input_file_name, argv[1]);
-	}
-	else {
-		fprintf(stderr, "No input file specified.\n\n");
-		exit(EXIT_FAILURE);
-	}
+void initialize_params(char *filename){
 
 	/* Set default values */
+	strcpy(params.input_file_name, filename);
 	params.frequency = default_frequency;
 	params.rate_wpm = default_rate_wpm;
 	params.unit_duration = WAVFILE_SAMPLES_PER_SECOND / default_rate_wpm;
@@ -108,7 +97,7 @@ void process_input(){
 
 }
 
-void process_output(){
+char *process_output(){
     /* Open output file, using input file name with .wav extension */
 	int i = strlen(params.output_file_name);
 	if (params.output_file_name[i - 4] == '.') {
@@ -127,8 +116,8 @@ void process_output(){
 	}
     params.output_text_file = fopen("output_text_file.txt", "w+");
 
-	
-}
+	return params.output_file_name;
+}	
 
 void create_wav_file(){
     /* Read in characters, look up series of dots and dashes in sign

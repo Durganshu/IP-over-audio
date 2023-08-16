@@ -1,10 +1,13 @@
 #include "networking.h"
 
+int server_socket;
+struct sockaddr_in server_addr, client_addr;
+socklen_t addr_len = sizeof(client_addr);
 
-int start_tcp_server() {
-    int server_socket;
-    struct sockaddr_in server_addr, client_addr;
-    socklen_t addr_len = sizeof(client_addr);
+int tcp_start_server() {
+    // int server_socket;
+    // struct sockaddr_in server_addr, client_addr;
+    // socklen_t addr_len = sizeof(client_addr);
 
     // Create a server socket
     server_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -30,16 +33,17 @@ int start_tcp_server() {
     }
 
     printf("Server listening on port %d...\n", PORT);
-
     // Accept a connection from a client
     server_socket = accept(server_socket, (struct sockaddr *)&client_addr, &addr_len);
     if (server_socket < 0) {
         perror("Accept failed");
         exit(EXIT_FAILURE);
     }
+    return 0;
+}
 
+void tcp_handle_request()
+{
     printf("Connection accepted from %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
     receive_message(server_socket);
-
-    return 0;
 }

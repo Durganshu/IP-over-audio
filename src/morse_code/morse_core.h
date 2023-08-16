@@ -33,11 +33,11 @@ typedef struct {
 
 extern Parameters params;
 
-void initialize_params();
+void initialize_params(char *filename);
 
 void process_input();
 
-void process_output();
+char *process_output();
 
 void create_wav_file();
 
