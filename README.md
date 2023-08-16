@@ -14,19 +14,28 @@ this program creates a new text file and asks the user to enter its content.
 
 ## Prerequisites
 
-Sox: sudo apt install sox
+Sox: 
+```shell
+sudo apt install sox
+```
 
-Command 'paplay':    sudo apt install pulseaudio-utils
+Command 'paplay': 
+```shell
+sudo apt install pulseaudio-utils
+```
     
-To play an audio file, execute:    paplay example_file.wav
+To play an audio file, execute:    
+```shell
+paplay example_file.wav
+```
+
+cmake: 
+```shell
+sudo apt install cmake
+```
+
 
 Port-Audio: http://www.portaudio.com/docs/v19-doxydocs/compile_linux.html
-
-PocketSphinx: https://cmusphinx.github.io/doc/pocketsphinx/index.html
-
-CMU Flite: http://www.festvox.org/flite/
-
-
 
 Might be a prequisite (as for now, works with\without it):
 
@@ -34,7 +43,19 @@ In the file '/etc/modprobe.d/blacklist.conf',
 
 turn the line 'blacklist pcspkr' to a comment using '#'.
 
+## Build instructions
 
+```shell
+mkdir build && cd build
+cmake ../
+make
+```
+
+## Execution
+
+```shell
+./test_code example_file.txt
+```
 
 ## Important references
 
