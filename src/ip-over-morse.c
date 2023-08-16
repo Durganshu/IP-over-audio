@@ -4,8 +4,8 @@
 #define DEFAULT_PORT 8080
 #define DEFAULT_ADDRESS "127.0.0.1"
 
-bool send = true;
-bool receive = !send;
+bool sender = true;
+bool receiver = false;
 int port = DEFAULT_PORT;
 char* address = DEFAULT_ADDRESS;
 char* protocol = "TCP";
@@ -30,21 +30,25 @@ void parseArgs(int argc, char* argv[])
     {
 	    arg++;
 	    if (strcmp(argv[arg],"-h")==0 ||
-	        strcmp(argv[arg],"--help")==0) printHelp(argv[0], true);
+	        strcmp(argv[arg],"--help")==0)
+        {
+            printHelp(argv[0], true);
+            exit(0);
+        }
 
 	    if ((strcmp(argv[arg],"-s")==0 ||
 	        strcmp(argv[arg],"--send")==0)) {
 	        arg++;
-	        send = true;
-            receive = false;
+	        sender = true;
+            receiver = false;
             continue;
         }
     
 	    if ((strcmp(argv[arg],"-r")==0 ||
 	        strcmp(argv[arg],"--receive")==0)) {
 	        arg++;
-	        send = false;
-            receive = true;
+	        sender = false;
+            receiver = true;
             continue;
         }
     
@@ -114,7 +118,7 @@ int main(int argc, char *argv[])
     // To-do: initialize server/client
     /****************************************************************/
     int temp;
-    if(send){
+    if(sender){
         if(strcmp(protocol, "UDP") == 0){
             temp = UDP_CLIENT;
             udp_start_client(address);
