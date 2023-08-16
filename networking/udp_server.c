@@ -45,25 +45,36 @@ int start_udp_server() {
 	ssize_t rec;
     size_t written;
 	char *confirm = "File received by server";
+	
+	
+	int exitFlag=1;
+	while(exitFlag){
 	// Creating a file.
 	FILE* fp = fopen(filename, "wb"); //Opens the file for writing in binary mode.
-    while (rec = recvfrom(sockfd, buffer, BUFFER_SIZE, 0, (struct sockaddr *)&cliaddr, &len) > 0) {
-        // Writing the received bytes to the file.
-		written = fwrite(buffer, 1, rec, fp);
-        if (written != rec) {
-            perror("Error while writing to file");
-            fclose(fp);
-            return 1;
-        }
-
-	bzero(buffer, BUFFER_SIZE);
-	//printf("received %d bytes\n",n);
-    	}
-    // TODO: Add a code to send response to client
+	    while (rec = recvfrom(sockfd, buffer, BUFFER_SIZE, 0, (struct sockaddr *)&cliaddr, &len) > 0) {
+		if (buffer[0]=='e' && buffer[1] = 'x' && buffer[2]='i' && buffer]3]='t') {
+			exitFlag = 0;
+			break;
+		}
+	        // Writing the received bytes to the file.
+			written = fwrite(buffer, 1, rec, fp);
+	        if (written != rec) {
+	            perror("Error while writing to file");
+	            fclose(fp);
+	            return 1;
+	        }
+	
+		bzero(buffer, BUFFER_SIZE);
+		//printf("received %d bytes\n",n);
+	    	}
+	    
 	// send response to the client
 	sendto(sockfd, confirm, strlen(confirm), MSG_CONFIRM, (const struct sockaddr *)&cliaddr, len);
 	fclose(fp);
+	// TO DO: Process received wave file
+		
 	printf("File received!\n");
+	}
 		
 
     return 0;
