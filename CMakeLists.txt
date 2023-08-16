@@ -4,9 +4,9 @@ project(MorseCodeProject C)
 
 set(CMAKE_C_STANDARD 11)
 
-file(GLOB MORSE_SOURCES "morse_code/*.c")
+file(GLOB MORSE_SOURCES "src/morse_code/*.c")
 
-file(GLOB NETWORKING_SOURCES "networking/*.c")
+file(GLOB NETWORKING_SOURCES "src/networking/*.c")
 
 add_executable(test_code ${MORSE_SOURCES} ${NETWORKING_SOURCES})
 # add_executable(test_code
