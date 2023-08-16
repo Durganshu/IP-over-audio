@@ -71,9 +71,12 @@ int start_udp_server() {
 	// send response to the client
 	sendto(sockfd, confirm, strlen(confirm), MSG_CONFIRM, (const struct sockaddr *)&cliaddr, len);
 	fclose(fp);
-	// TO DO: Process received wave file
-		
 	printf("File received!\n");
+	// TO DO: Process received wave file
+	read_Wav_file();  //??
+	onvert_Wav_to_morse(); //??
+		
+	
 	}
 		
 
