@@ -1,6 +1,56 @@
 #include "networking.h"
 
 
+// // function reading file in buffer
+// int read_file(FILE* fp, char* buf, int s)
+// {
+//     int i, len;
+//     char ch;
+//     for (i = 0; i < s; i++) {
+//         ch = fgetc(fp);
+//         buf[i] = ch;
+//         if (ch == EOF)
+//             return 1;
+//     }
+//     return 0;
+// }
+/**
+ * You didn't use this function
+*/
+
+
+int send_response(int socket) {
+    if (send(socket, RECEIVED_VALIDATION, strlen(RECEIVED_VALIDATION), 0) < 0){
+        printf("Couldn't send the response to the client\n");
+        return ERROR;
+    }
+    return 0;
+}
+
+
+void receive_response(int socket) {
+    // Receive the server's response:
+    char response[BUFFER_SIZE];
+    memset(response, 0, BUFFER_SIZE);
+    FILE *response_file;
+
+    response_file = fopen("response.txt", "wb");
+    if (!response_file) {
+        perror("Error opening file for writing");
+        exit(EXIT_FAILURE);
+    }
+
+    int bytes_received;
+    while ((bytes_received = recv(socket, response, BUFFER_SIZE, 0)) > 0) {
+        fwrite(response, 1, bytes_received, response_file);
+    }
+
+    fclose(response_file);
+    printf("Other computer's response: %s\n", response);
+    printf("Response from the other computer received and saved as 'response.txt'\n");
+}
+
+
 void send_file(char text_file[], int socket) {
     FILE *file;
     // Open the WAV file to be sent
@@ -46,37 +96,6 @@ void receive_message(int socket) {
     printf("File received and saved as 'received.wav'\n");
 
     send_response(socket);
-}
-
-
-int send_response(int socket){
-    if (send(socket, RECEIVED_VALIDATION, strlen(RECEIVED_VALIDATION), 0) < 0){
-        printf("Couldn't send the response to the client\n");
-        return ERROR;
-    }
-}
-
-
-void receive_response(int socket) {
-    // Receive the server's response:
-    char response[BUFFER_SIZE];
-    memset(response, 0, BUFFER_SIZE);
-    FILE *response_file;
-
-    response_file = fopen("response.txt", "wb");
-    if (!response_file) {
-        perror("Error opening file for writing");
-        exit(EXIT_FAILURE);
-    }
-
-    int bytes_received;
-    while ((bytes_received = recv(socket, response, BUFFER_SIZE, 0)) > 0) {
-        fwrite(response, 1, bytes_received, response_file);
-    }
-
-    fclose(response_file);
-    printf("Other computer's response: %s\n", response);
-    printf("Response from the other computer received and saved as 'response.txt'\n");
 }
 
 

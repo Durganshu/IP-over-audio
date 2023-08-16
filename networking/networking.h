@@ -19,23 +19,23 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-int recvFile(char* buf, int s);
+int recv_file(char* buf, int s);
 int start_udp_server();
 
-int readFile(FILE* fp, char* buf, int s);
 int start_udp_client(char audio_file[], char ip_address[]);
 
 
 // TCP:
-void receive_message(int server_socket);
-void send_response(int server_socket);
-int start_tcp_server();
-void shutdown_connection(int server_socket);
 #define RECEIVED_VALIDATION "The server has received your message.\n"
+// int read_file(FILE* fp, char* buf, int s);
+int send_response(int socket);
+void receive_response(int socket);
+void send_file(char text_file[], int socket);
+void receive_message(int socket);
+void shutdown_connection(int socket);
 
-void send_file(FILE *file, int client_socket);
-void receive_server_response(int client_socket);
+int start_tcp_server();
+
 int start_tcp_client(char text_file[], char ip_address[]);
-void shutdown_connection(int client_socket);
 
 #endif

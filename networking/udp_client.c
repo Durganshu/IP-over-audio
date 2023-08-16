@@ -1,21 +1,6 @@
 #include "networking.h"
 
 
-// function reading file in buffer
-int readFile(FILE* fp, char* buf, int s)
-{
-    int i, len;
-    char ch;
-    for (i = 0; i < s; i++) {
-        ch = fgetc(fp);
-        buf[i] = ch;
-        if (ch == EOF)
-            return 1;
-    }
-    return 0;
-}
-
-
 int start_udp_client(char audio_file[], char ip_address[]) {
     int sockfd;
     struct sockaddr_in serverAddr;

@@ -43,8 +43,3 @@ int start_tcp_server() {
 
     return 0;
 }
-
-
-void shutdown_connection(int server_socket) {
-    close(server_socket);
-}

@@ -1,7 +1,7 @@
 #include "networking.h"
 
 
-int recvFile(char* buf, int s){
+int recv_file(char* buf, int s){
     int i;
     char ch;
     for (i = 0; i < s; i++) {
