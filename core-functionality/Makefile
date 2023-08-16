@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra
-SRCS       = main.c morse_core.c text_to_wav.c text_to_wav.h wavfile.c wavfile.h wav_to_morse.c wav_to_morse.h 
+SRCS = morse_code/main.c morse_code/morse_core.c morse_code/text_to_wav.c morse_code/text_to_wav.h morse_code/wavfile.c morse_code/wavfile.h morse_code/wav_to_morse.c morse_code/wav_to_morse.h 
 build_dir 	= build
 target	  	= $(build_dir)/test_code
 OBJS = $(SRCS:.c=.o)
@@ -19,4 +19,4 @@ $(build_dir) :
 	mkdir -p $(build_dir)
 
 clean :
-	rm -rf $(build_dir) *.o
+	rm -rf $(build_dir) morse_code/*.o
