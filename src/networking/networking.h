@@ -2,7 +2,7 @@
 #define NETWORKING_H
 
 
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 30000
 #define PORT 54321
 #define ERROR 1
 #define SUCCESS 0
@@ -22,7 +22,9 @@
 int recv_file(char* buf, int s);
 int udp_start_server();
 
-void udp_handle_request();
+void udp_recv_request();
+
+void udp_send_response();
 
 int udp_start_client(char ip_address[]);
 

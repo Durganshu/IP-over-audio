@@ -197,8 +197,8 @@ void read_Wav_file(){
 
 }
 
-void convert_Wav_to_morse(){
+char* convert_Wav_to_morse(){
 
-	wav_to_morse(convParams, header);
+	return wav_to_morse(convParams, header);
 
 }

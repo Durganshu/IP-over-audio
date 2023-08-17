@@ -31,7 +31,7 @@ return "";
 }
 
 
-void wav_to_morse(ConversionParameters param, WavHeader head)
+char* wav_to_morse(ConversionParameters param, WavHeader head)
 {
     int new_data[param.new_data_count];
     short x;
@@ -108,7 +108,8 @@ void wav_to_morse(ConversionParameters param, WavHeader head)
             x =  new_data[j];
         }
     }
-	printf("The wave file says: %s \n", sentence);
+	//printf("The wave file says: %s \n", sentence);
+    return sentence;
 	free(sentence);
 }
 

@@ -31,7 +31,7 @@ typedef struct {
 char* decode(char* s);
 
 // void wav_to_morse(struct ConversionParameters *param, struct WavHeader *head);
-void wav_to_morse(ConversionParameters param, WavHeader head);
+char* wav_to_morse(ConversionParameters param, WavHeader head);
 
 
 #endif

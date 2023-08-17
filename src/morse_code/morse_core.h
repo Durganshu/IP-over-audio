@@ -54,6 +54,6 @@ extern ConversionParameters convParams;
 
 void read_Wav_file();
 
-void convert_Wav_to_morse();
+char* convert_Wav_to_morse();
 
 #endif

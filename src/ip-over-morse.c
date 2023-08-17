@@ -8,7 +8,7 @@ bool sender = true;
 bool receiver = false;
 int port = DEFAULT_PORT;
 char* address = DEFAULT_ADDRESS;
-char* protocol = "TCP";
+char* protocol = "UDP";
 
 void printHelp(char* prg, bool printHeader)
 {
@@ -38,7 +38,6 @@ void parseArgs(int argc, char* argv[])
 
 	    if ((strcmp(argv[arg],"-s")==0 ||
 	        strcmp(argv[arg],"--send")==0)) {
-	        arg++;
 	        sender = true;
             receiver = false;
             continue;
@@ -46,7 +45,6 @@ void parseArgs(int argc, char* argv[])
     
 	    if ((strcmp(argv[arg],"-r")==0 ||
 	        strcmp(argv[arg],"--receive")==0)) {
-	        arg++;
 	        sender = false;
             receiver = true;
             continue;
@@ -70,6 +68,7 @@ void parseArgs(int argc, char* argv[])
         if (strcmp(argv[arg],"-pcl")==0 && (arg+1<argc)) {
             arg++;
             protocol = argv[arg];
+            printf("Using %s protocol\n", protocol);
 	        continue;           
         }
     }
@@ -98,6 +97,11 @@ char *get_wav_file()
     play_output();
     free(file_name);
     return wav_filename;
+}
+
+char* decode_wav_file(){
+    read_Wav_file();
+    return convert_Wav_to_morse();
 }
 
 #define UDP_CLIENT 0
@@ -165,7 +169,9 @@ int main(int argc, char *argv[])
             
         else if (temp == UDP_SERVER)
         {
-            udp_handle_request();
+            udp_recv_request();
+            // Decode WAV to text
+            udp_send_response(decode_wav_file());
         }
             
         else if (temp == TCP_CLIENT)
@@ -177,23 +183,18 @@ int main(int argc, char *argv[])
         {
             tcp_handle_request();
         }
-            
-        
-        /****************************************************************/
-        // To-do: encode/decode the message
-        /****************************************************************/
-    
-        /****************************************************************/
-        // To-do: send/receive the response
-        /****************************************************************/
 
         /****************************************************************/
         // To-do: Ask the user if he wants to send/receive another message
         // if yes, continue, else break
         /****************************************************************/
-
-        if(!keep_sending)
+        printf("Do you want to send/receive another message? (y/n): ");
+        char c;
+        scanf(" %c", &c);
+        if(c == 'n')
+        {
             break;
+        }
 
     }
     
