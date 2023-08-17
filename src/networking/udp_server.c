@@ -59,11 +59,11 @@ void udp_handle_request()
 	    //printf("received %d bytes\n",n);
 	}
     
-	    
+	printf("File received!\n")    
 	// send response to the client
 	sendto(udp_sockfd, confirm, strlen(confirm), MSG_CONFIRM, (const struct sockaddr *)&cliaddr, len);
 	fclose(fp);
-	printf("File received!\n");
+	;
 
     // TO DO: Process received wave file
 	//read_Wav_file();  //??
