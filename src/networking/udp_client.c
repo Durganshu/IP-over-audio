@@ -22,7 +22,7 @@ int udp_start_client(char ip_address[]) {
     int err = inet_pton(AF_INET, ip_address, &serverAddr.sin_addr);
     if (err <= 0) {  // Inspired by "https://man7.org/linux/man-pages/man3/inet_pton.3.html"
         if (err == 0)
-            fprintf(stderr, "Not in presentation format");
+            fprintf(stderr, "Invalid address/Address not supported");
         else
             perror("inet_pton");
         return ERROR;
