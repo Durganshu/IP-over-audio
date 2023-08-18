@@ -52,7 +52,7 @@ int start_udp_server() {
 	// Creating a file.
 	FILE* fp = fopen(filename, "wb"); //Opens the file for writing in binary mode.
 	    while (rec = recvfrom(sockfd, buffer, BUFFER_SIZE, 0, (struct sockaddr *)&cliaddr, &len) > 0) {
-		if ((buffer[0]=='e') && (buffer[1]=='x') && (buffer[2]=='i') && (buffer[3]=='t')) {
+		if ((buffer[0]=='E') && (buffer[1]=='N') && (buffer[2]=='D')) {
 			exitFlag = 0;
 			break;
 		}
