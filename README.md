@@ -73,7 +73,7 @@ shell1$>./ip-over-morse -s -p 54321 -a 127.0.0.1
 Example for a sender (using TCP):
 
 ```shell
-shell1$>./ip-over-morse -r
+shell2$>./ip-over-morse -r
 ```
 
 Example for a receiver (using UDP):
@@ -85,7 +85,7 @@ shell1$>./ip-over-morse -s -p 54321 -a 127.0.0.1 -pcl UDP
 Example for a sender (using TCP):
 
 ```shell
-shell1$>./ip-over-morse -r -pcl UDP
+shell2$>./ip-over-morse -r -pcl UDP
 ```
 
 ## Important references
