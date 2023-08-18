@@ -15,15 +15,10 @@ add_executable(test_code ${MAIN_SOURCE} ${MORSE_SOURCES} ${NETWORKING_SOURCES})
 
 target_include_directories(test_code PRIVATE morse_code networking)
 
-target_compile_options(test_code PRIVATE -Wall -Wextra)
+# target_compile_options(test_code PRIVATE -Wall -Wextra)
+target_compile_options(test_code PRIVATE)
 target_link_libraries(test_code PRIVATE m)
 
 set_target_properties(test_code PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
-)
-
-add_custom_target(makefile_generation ALL
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/CMakeLists.txt ${CMAKE_BINARY_DIR}/generated_Makefile
-    COMMENT "Generating Makefile"
-    VERBATIM
 )

@@ -1,8 +1,6 @@
 #ifndef WAV_TO_MORSE_H
 #define WAV_TO_MORSE_H
 
-#define BUFFER_SIZE 1024
-
 #define THRESHOLD 0.5 // Adjust this threshold according to your audio
 #include <stdio.h>
 

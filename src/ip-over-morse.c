@@ -8,7 +8,7 @@ bool sender = true;
 bool receiver = false;
 int port = DEFAULT_PORT;
 char* address = DEFAULT_ADDRESS;
-char* protocol = "UDP";
+char* protocol = "TCP";
 
 void printHelp(char* prg, bool printHeader)
 {
@@ -29,43 +29,43 @@ void parseArgs(int argc, char* argv[])
     while(arg+1<argc) 
     {
 	    arg++;
-	    if (strcmp(argv[arg],"-h")==0 ||
+	    if ((strcmp(argv[arg],"-h")==0) ||
 	        strcmp(argv[arg],"--help")==0)
         {
             printHelp(argv[0], true);
             exit(0);
         }
 
-	    if ((strcmp(argv[arg],"-s")==0 ||
-	        strcmp(argv[arg],"--send")==0)) {
+	    if ((strcmp(argv[arg],"-s")==0) ||
+	        (strcmp(argv[arg],"--send")==0)) {
+
 	        sender = true;
             receiver = false;
             continue;
         }
     
-	    if ((strcmp(argv[arg],"-r")==0 ||
-	        strcmp(argv[arg],"--receive")==0)) {
+	    if ((strcmp(argv[arg],"-r")==0) ||
+	        (strcmp(argv[arg],"--receive")==0)) {
 	        sender = false;
             receiver = true;
             continue;
         }
     
-	    if (strcmp(argv[arg],"-p")==0 ||
-	        strcmp(argv[arg],"--port") && (arg+1<argc)) {
-	        arg++;
-	        
+	    if ((strcmp(argv[arg],"-p")==0) ||
+	        (strcmp(argv[arg],"--port")==0) && (arg+1<argc)) {
+	        arg++;     
 	    	port = atoi(argv[arg]);
 	        continue;
 	    }
     
-	    if (strcmp(argv[arg],"-a")==0 ||
-	        strcmp(argv[arg],"--address") && (arg+1<argc)) {
+	    if ((strcmp(argv[arg],"-a")==0) ||
+	        (strcmp(argv[arg],"--address")==0) && (arg+1<argc)) {
 	        arg++;
 	    	address = argv[arg];
 	        continue;
 	    }
 	    
-        if (strcmp(argv[arg],"-pcl")==0 && (arg+1<argc)) {
+        if ((strcmp(argv[arg],"-pcl")==0) && (arg+1<argc)) {
             arg++;
             protocol = argv[arg];
             printf("Using %s protocol\n", protocol);
