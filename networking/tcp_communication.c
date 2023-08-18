@@ -20,7 +20,9 @@
 
 
 int send_response(int socket) {
-    if (send(socket, RECEIVED_VALIDATION, strlen(RECEIVED_VALIDATION), 0) < 0){
+    char buffer[BUFFER_SIZE];
+    strcpy(buffer, RECEIVED_VALIDATION);
+    if (send(socket, buffer, strlen(buffer), 0) < 0){
         printf("Couldn't send the response to the client\n");
         return ERROR;
     }
