@@ -1,15 +1,15 @@
 #include "networking.h"
 
+int client_socket;
+struct sockaddr_in server_addr;
 
-int start_tcp_client(char text_file[], char ip_address[]) {
-    int client_socket;
-    struct sockaddr_in server_addr;
+int tcp_start_client(char ip_address[]) {
 
     // Create a client socket
     client_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (client_socket < 0) {
         perror("Error creating socket");
-        exit(EXIT_FAILURE);
+        return ERROR;
     }
 
     server_addr.sin_family = AF_INET;
@@ -17,19 +17,23 @@ int start_tcp_client(char text_file[], char ip_address[]) {
 
     if (inet_pton(AF_INET, ip_address, &server_addr.sin_addr) <= 0) {
         perror("Invalid address/Address not supported");
-        exit(EXIT_FAILURE);
+        return ERROR;
     }
 
     // Connect to the server
     if (connect(client_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
         perror("Connection Failed");
-        exit(EXIT_FAILURE);
+        return ERROR;
     }
 
     printf("Connected to the server at %s:%d\n", ip_address, PORT);
 
+    return 0;
+}
+
+void tcp_send(char text_file[])
+{
     // Send the WAV file to the server
     send_file(text_file, client_socket);
 
-    return 0;
 }

@@ -2,7 +2,7 @@
 #define NETWORKING_H
 
 
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 30000
 #define PORT 54321
 #define ERROR 1
 #define SUCCESS 0
@@ -20,9 +20,15 @@
 #include <sys/types.h>
 
 int recv_file(char* buf, int s);
-int start_udp_server();
+int udp_start_server();
 
-int start_udp_client(char audio_file[], char ip_address[]);
+void udp_recv_request();
+
+void udp_send_response();
+
+int udp_start_client(char ip_address[]);
+
+void udp_send(char audio_file[]);
 
 
 // TCP:
@@ -34,8 +40,11 @@ void send_file(char text_file[], int socket);
 void receive_message(int socket);
 void shutdown_connection(int socket);
 
-int start_tcp_server();
+int tcp_start_server();
 
-int start_tcp_client(char text_file[], char ip_address[]);
+void tcp_handle_request();
+
+int tcp_start_client( char ip_address[]);
+void tcp_send(char text_file[]);
 
 #endif
