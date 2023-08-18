@@ -79,11 +79,11 @@ void udp_recv_request()
 	
 		
 }
-void udp_send_response(char* message){
-	//char *confirm = "File received by server";
+void udp_send_response(){
+	char buffer[BUFFER_SIZE];
+    strcpy(buffer, RECEIVED_VALIDATION);
 	// send response to the client
-	//sendto(udp_sockfd, confirm, strlen(confirm), MSG_CONFIRM, (const struct sockaddr *)&cliaddr, len);
-	if (sendto(udp_sockfd, message, strlen(message), MSG_CONFIRM, (const struct sockaddr *)&cliaddr, len)<0){
-		 printf("Couldn't send the response to the client\n");
-            }
+	if (sendto(udp_sockfd, buffer, sizeof(buffer), MSG_CONFIRM, (const struct sockaddr *)&cliaddr, len)<0){
+		printf("Couldn't send the response to the client\n");
+    }
 }

@@ -48,11 +48,6 @@ void receive_response(int socket) {
         bytes_left -= buffer_received;
     }
 
-    // int bytes_received;
-    // while ((bytes_received = recv(socket, response, BUFFER_SIZE, 0)) > 0) {
-    //     fwrite(response, 1, bytes_received, response_file);
-    // }
-
     fclose(response_file);
     printf("Other computer's response: %s\n", response);
     printf("Response from the other computer received and saved as 'response.txt'\n");

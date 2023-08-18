@@ -177,7 +177,7 @@ ConversionParameters convParams;
 
 void read_Wav_file(){
 
-	const char* filename = "example_file.wav";
+	const char* filename = "received.wav";
     convParams.file = fopen(filename, "rb");
     if (!convParams.file) {
         printf("Error opening file\n");

@@ -171,7 +171,10 @@ int main(int argc, char *argv[])
         {
             udp_recv_request();
             // Decode WAV to text
-            udp_send_response(decode_wav_file());
+            udp_send_response();
+            printf("----------WAV File info----------\n");
+            printf("%s\n", decode_wav_file());
+            printf("------------------------------\n");
         }
             
         else if (temp == TCP_CLIENT)
@@ -182,6 +185,9 @@ int main(int argc, char *argv[])
         else
         {
             tcp_handle_request();
+            printf("----------WAV File info----------\n");
+            printf("%s\n", decode_wav_file());
+            printf("------------------------------\n");
         }
 
         /****************************************************************/
