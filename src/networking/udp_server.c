@@ -28,7 +28,7 @@ int udp_start_server() {
         return ERROR;
     }
 		
-
+    printf("Server listening on port %d...\n", PORT);
     return 0;
 }
 
