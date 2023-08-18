@@ -14,12 +14,12 @@ void printHelp(char* prg, bool printHeader)
 {
 	   
     printf(" Options:\n"
-	   "  -s / --send      send the message\n"
+	   "  -s / --send      	  send the message\n"
 	   "  -r / --receive      receive the message\n"
-	   "  -p / --port    specify port(default:8080\n"
-	   "  -a / --address    specify destination address(default: 127.0.0.1)\n"
-	   "  -pcl  specify protocol: UDP or TCP (default:TCP)\n"
-       "  -h / --help      print this help\n");
+	   "  -p / --port    	  specify port(default:8080)\n"
+	   "  -a / --address      specify destination address(default: 127.0.0.1)\n"
+	   "  -pcl  		  specify protocol: UDP or TCP (default:TCP)\n"
+       "  -h / --help      	  print this help\n");
 
 }
 
