@@ -7,7 +7,6 @@ socklen_t len;
 
 
 int udp_start_server() {
-    
     // Creating socket file descriptor
     if ((udp_sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
         perror("socket creation failed");
@@ -32,6 +31,7 @@ int udp_start_server() {
     return 0;
 }
 
+
 void udp_recv_request()
 {
     len = sizeof(cliaddr); 
@@ -48,7 +48,7 @@ void udp_recv_request()
 	if (written != rec) {
 	    perror("Error while writing to file");
 	    fclose(fp);
-	    return 1;
+	    return;
 	}
 	bzero(buffer, BUFFER_SIZE);
 	// while (rec = recvfrom(udp_sockfd, buffer, BUFFER_SIZE, 0, (struct sockaddr *)&cliaddr, &len) > 0) {
@@ -61,7 +61,7 @@ void udp_recv_request()
 	//     if (written != rec) {
 	//         perror("Error while writing to file");
 	//         fclose(fp);
-	//         return 1;
+	//         return;
 	//     }
 
 	//     bzero(buffer, BUFFER_SIZE);
@@ -71,14 +71,12 @@ void udp_recv_request()
 	printf("File received!\n");    
 	fclose(fp);
 	
-    // TO DO: Process received wave file
+    // TO DO: Process received wav file
 	//read_Wav_file();  //??
-	//convert_Wav_to_morse(); //??
-
-
-	
-		
+	//convert_Wav_to_morse(); //??	
 }
+
+
 void udp_send_response(){
 	char buffer[BUFFER_SIZE];
     strcpy(buffer, RECEIVED_VALIDATION);

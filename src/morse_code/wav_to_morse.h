@@ -1,7 +1,7 @@
 #ifndef WAV_TO_MORSE_H
 #define WAV_TO_MORSE_H
 
-#define THRESHOLD 0.5 // Adjust this threshold according to your audio
+#define THRESHOLD 0.5 // Adjustable in case of need
 #include <stdio.h>
 
 typedef struct {
@@ -17,19 +17,16 @@ typedef struct {
     short  bits_per_sample;
     char   data[4];          // should always contain "data"
     int    bytes_in_data;
-}WavHeader;
+} WavHeader;
 
 typedef struct {
-
     int samples_group;
     int new_data_count;
     FILE* file;
-}ConversionParameters;
+} ConversionParameters;
 
-char* decode(char* s);
+char* decode(char s[]);
 
-// void wav_to_morse(struct ConversionParameters *param, struct WavHeader *head);
 char* wav_to_morse(ConversionParameters param, WavHeader head);
-
 
 #endif

@@ -5,10 +5,6 @@ struct sockaddr_in tcp_server_addr, client_addr;
 socklen_t addr_len = sizeof(client_addr);
 
 int tcp_start_server() {
-    // int tcp_server_socket;
-    // struct sockaddr_in tcp_server_addr, client_addr;
-    // socklen_t addr_len = sizeof(client_addr);
-
     // Create a server socket
     tcp_server_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (tcp_server_socket < 0) {
