@@ -18,6 +18,7 @@ int main(int argc, char *argv[]) {
     /****************************************************************/
     // Initialize server/client
     /****************************************************************/
+    int sc;
     if (who_am_i == UDP_CLIENT) {
         udp_start_client(address);
     }
@@ -25,10 +26,10 @@ int main(int argc, char *argv[]) {
         udp_start_server();
     }
     else if (who_am_i == TCP_CLIENT) {
-        tcp_start_client(address);
+        sc = tcp_start_client(address);
     }
     else {
-        tcp_start_server();
+        sc = tcp_start_server();
     }
 
         
@@ -61,10 +62,20 @@ int main(int argc, char *argv[]) {
         // Ask the user if s/he wants to send/receive another message.
         // if yes, continue, else break.
         /****************************************************************/
-        printf("Do you want to send/receive another message? (y/n): ");
+        printf("Do you want to send/receive another message? (s/r/n): ");
         char c;
         scanf(" %c", &c);
-        if(c == 'n') break;
+        if (c == 'n') break;
+        if (who_am_i == UDP_CLIENT || who_am_i == UDP_SERVER) {
+            // TODO
+        }
+        else if (who_am_i == TCP_CLIENT || who_am_i == TCP_SERVER) {
+            (c == 's') ? send_file(get_wav_file(), sc) : receive_message(sc);
+        }
+    }
+
+    if (who_am_i == TCP_CLIENT || who_am_i == TCP_SERVER) {
+        shutdown_connection(sc);
     }
 }
 

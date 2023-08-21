@@ -3,6 +3,8 @@
 
 #define THRESHOLD 0.5 // Adjustable in case of need
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include "morse_core.h"
 #include "../networking/networking.h"
 

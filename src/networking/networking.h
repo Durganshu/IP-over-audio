@@ -37,7 +37,7 @@ int send_response(int socket);
 void receive_response(int socket);
 void send_file(char text_file[], int socket);
 void receive_message(int socket);
-void shutdown_connection(int socket);
+void shutdown_connection();
 
 int tcp_start_server();
 

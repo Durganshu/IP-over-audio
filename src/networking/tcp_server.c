@@ -9,7 +9,7 @@ int tcp_start_server() {
     tcp_server_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (tcp_server_socket < 0) {
         perror("Error creating socket");
-        exit(EXIT_FAILURE);
+        return -1;
     }
 
     tcp_server_addr.sin_family = AF_INET;
@@ -19,13 +19,13 @@ int tcp_start_server() {
     // Bind the server socket to a specific address and port
     if (bind(tcp_server_socket, (struct sockaddr *)&tcp_server_addr, sizeof(tcp_server_addr)) < 0) {
         perror("Bind failed");
-        exit(EXIT_FAILURE);
+        return -1;
     }
 
     // Listen for incoming connections
     if (listen(tcp_server_socket, 1) < 0) {
         perror("Listen failed");
-        exit(EXIT_FAILURE);
+        return -1;
     }
 
     printf("Server listening on port %d...\n", PORT);
@@ -33,9 +33,10 @@ int tcp_start_server() {
     tcp_server_socket = accept(tcp_server_socket, (struct sockaddr *)&client_addr, &addr_len);
     if (tcp_server_socket < 0) {
         perror("Accept failed");
-        exit(EXIT_FAILURE);
+        return -1;
     }
-    return 0;
+
+    return tcp_server_socket;
 }
 
 void tcp_handle_request()

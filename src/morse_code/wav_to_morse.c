@@ -1,9 +1,6 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 #include "wav_to_morse.h"
 
-const char *morseTable[MAX_CHARS+1][2] = {
+const char *morseTable[][2] = {
     {"A", ".-"},     {"B", "-..."},   {"C", "-.-."},
     {"D", "-.."},    {"E", "."},      {"F", "..-."},
     {"G", "--."},    {"H", "...."},    {"I", ".."},
@@ -18,12 +15,8 @@ const char *morseTable[MAX_CHARS+1][2] = {
     {"6", "-...."},  {"7", "--..."},   {"8", "---.."},
     {"9", "----."},
     {".", ".-.-.-"}, {",", "--..--"},  {"?", "..--.."},
-    {"\'", ".----."}, {"!", "-.-.--"}, {"/", "-..-."},
-	{"(", "-.--."}, {")", "-.--.-"}, {"&", ".-..."},
-	{":", "---..."}, {";", "-.-.-."}, {"=", "-...-"},
-	{"+", ".-.-."}, {"-", "-....-"}, {"_", "..--.-"},
-	{"\"", ".-..-."}, {"$", "...-..-"}, {"@", ".--.-."},
-	{" ", " "}, {"", NULL}  // Null-terminated entry to indicate the end of the array
+    {"!", "-.-.--"}, {" ", " "}, {"'",".----."},
+    {"", NULL}  // Null-terminated entry to indicate the end of the array
 };
 
 
@@ -35,7 +28,7 @@ return "";
 }
 
 
-void wav_to_morse(ConversionParameters param, WavHeader head)
+char* wav_to_morse(ConversionParameters param, WavHeader head)
 {
     int new_data[param.new_data_count];
     short x;
@@ -62,7 +55,7 @@ void wav_to_morse(ConversionParameters param, WavHeader head)
         if (new_data[j] == x) count++;
         else {
             if (count>max[x]) max[x] = count;
-            if (count<min[x] || min[x] == 0) min[x] = count;
+            if (count<min[x] || min[x] ==0) min[x] = count;
             count = 1;
             x = new_data[j];
         }
@@ -74,7 +67,7 @@ void wav_to_morse(ConversionParameters param, WavHeader head)
     x = new_data[0];
     count = 0;
 	char word[6] = "";
-	char* sentence = (char*)malloc((BUFFER_SIZE) * sizeof(char));
+	char* sentence = (char*)malloc((1024) * sizeof(char));
     memset(sentence, 0, sizeof(char));
 
     for (int j = 0; j<param.new_data_count; j++) {
@@ -106,8 +99,7 @@ void wav_to_morse(ConversionParameters param, WavHeader head)
             x =  new_data[j];
         }
     }
-    printf("%s\n", sentence);
+    return sentence;
 	free(sentence);
 }
-
 

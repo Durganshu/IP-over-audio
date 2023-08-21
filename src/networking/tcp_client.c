@@ -4,12 +4,11 @@ int client_socket;
 struct sockaddr_in server_addr;
 
 int tcp_start_client(char ip_address[]) {
-
     // Create a client socket
     client_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (client_socket < 0) {
         perror("Error creating socket");
-        return ERROR;
+        return -1;
     }
 
     server_addr.sin_family = AF_INET;
@@ -17,18 +16,18 @@ int tcp_start_client(char ip_address[]) {
 
     if (inet_pton(AF_INET, ip_address, &server_addr.sin_addr) <= 0) {
         perror("Invalid address/Address not supported");
-        return ERROR;
+        return -1;
     }
 
     // Connect to the server
     if (connect(client_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
         perror("Connection Failed");
-        return ERROR;
+        return -1;
     }
 
     printf("Connected to the server at %s:%d\n", ip_address, PORT);
 
-    return 0;
+    return client_socket;
 }
 
 void tcp_send(char text_file[])

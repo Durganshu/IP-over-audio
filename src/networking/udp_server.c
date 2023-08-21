@@ -51,29 +51,9 @@ void udp_recv_request()
 	    return;
 	}
 	bzero(buffer, BUFFER_SIZE);
-	// while (rec = recvfrom(udp_sockfd, buffer, BUFFER_SIZE, 0, (struct sockaddr *)&cliaddr, &len) > 0) {
-	//     // if (buffer[0]=='e' && buffer[1] == 'x' && buffer[2]=='i' && buffer[3]=='t') {
-	//     // 	break;
-	//     // }
-	// 	printf("Received %ld bytes\n", rec);
-	//     // Writing the received bytes to the file.
-	//     written = fwrite(buffer, 1, rec, fp);
-	//     if (written != rec) {
-	//         perror("Error while writing to file");
-	//         fclose(fp);
-	//         return;
-	//     }
 
-	//     bzero(buffer, BUFFER_SIZE);
-	//     // printf("received %d bytes\n",n);
-	// }
-    
 	printf("File received!\n");    
 	fclose(fp);
-	
-    // TO DO: Process received wav file
-	//read_Wav_file();  //??
-	//convert_Wav_to_morse(); //??	
 }
 
 
