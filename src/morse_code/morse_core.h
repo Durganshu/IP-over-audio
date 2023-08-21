@@ -11,6 +11,7 @@
 #include <time.h>
 #include "text_to_wav.h"
 #include "wav_to_morse.h"
+
 typedef struct {
     /* Set default values */
     double frequency;
@@ -54,6 +55,6 @@ extern ConversionParameters convParams;
 
 void read_wav_file();
 
-char* convert_wav_to_morse();
+void convert_wav_to_morse();
 
 #endif

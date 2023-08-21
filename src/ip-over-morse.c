@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
         /****************************************************************/
         // Send/receive the message
         /****************************************************************/
-        char message[MAX_SENTENCE_LENGTH];
+        char message[BUFFER_SIZE];
 
         if (who_am_i == UDP_CLIENT) {
             udp_send(get_wav_file());
@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
         else if (who_am_i == UDP_SERVER) {
             udp_recv_request();
             udp_send_response();
-            print_info_and_message(message);
+            print_info_and_message();
         }
             
         else if (who_am_i == TCP_CLIENT) {
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
             
         else {
             tcp_handle_request();
-            print_info_and_message(message);
+            print_info_and_message();
         }
 
         /****************************************************************/
@@ -169,15 +169,10 @@ char* get_wav_file() {
     return wav_filename;
 }
 
-void decode_wav_file(char message[MAX_SENTENCE_LENGTH]) {
-    read_wav_file();
-    convert_wav_to_morse(message);
-}
-
-void print_info_and_message(char message[MAX_SENTENCE_LENGTH]) {
+void print_info_and_message() {
     printf("----------WAV File info----------\n");
-    decode_wav_file(message);
-    printf("----------The decoded message----------\n");
-    printf("%s\n", message);
+    read_wav_file();
+    printf("-------The decoded message-------\n");
+    convert_wav_to_morse();
     printf("---------------------------------\n");
 }

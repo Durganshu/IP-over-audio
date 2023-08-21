@@ -1,7 +1,6 @@
 #ifndef NETWORKING_H
 #define NETWORKING_H
 
-
 #define BUFFER_SIZE 30000
 #define PORT 54321
 #define ERROR 1

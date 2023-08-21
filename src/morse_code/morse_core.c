@@ -197,8 +197,6 @@ void read_wav_file() {
 
 }
 
-char* convert_wav_to_morse(){
-
-	return wav_to_morse(convParams, header);
-
+void convert_wav_to_morse(){
+	wav_to_morse(convParams, header);
 }

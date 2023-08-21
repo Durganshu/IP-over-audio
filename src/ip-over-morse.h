@@ -15,7 +15,6 @@
 void print_help(char* prg, bool printHeader);
 void parse_args(int argc, char* argv[]);
 char* get_wav_file();
-void decode_wav_file(char message[MAX_SENTENCE_LENGTH]);
-void print_info_and_message(char message[MAX_SENTENCE_LENGTH]);
+void print_info_and_message();
 
 #endif
