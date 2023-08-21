@@ -19,8 +19,6 @@ void write_tone(FILE *outfile, short waveform[], double frequency, int duration)
 		waveform[i] = volume * sin(frequency * timepoint * 2 * PI);
 	}
 	wavfile_write(outfile, waveform, duration);
-	
-	return;
 }
 
 
@@ -29,8 +27,6 @@ void write_silence(FILE *output_file, short waveform[], int duration) {
 		waveform[i] = 0;
 	}
 	wavfile_write(output_file, waveform, duration);
-
-	return;
 }
 
 void write_morse_char(FILE *output_file, short waveform[], double frequency,
@@ -60,7 +56,5 @@ void write_morse_char(FILE *output_file, short waveform[], double frequency,
 	/* Write inter-character space */
 	write_silence(output_file, waveform, 2 * unit_duration);
 	fprintf(output_text_file, " ");
-
-	return;
 }
   

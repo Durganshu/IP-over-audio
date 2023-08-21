@@ -2,6 +2,7 @@
 #define WAV_TO_MORSE_H
 
 #define THRESHOLD 0.5 // Adjustable in case of need
+#define MAX_SENTENCE_LENGTH 1024
 #include <stdio.h>
 
 typedef struct {
@@ -18,13 +19,16 @@ typedef struct {
     char   data[4];          // should always contain "data"
     int    bytes_in_data;
 } WavHeader;
+} WavHeader;
 
 typedef struct {
     int samples_group;
     int new_data_count;
     FILE* file;
 } ConversionParameters;
+} ConversionParameters;
 
+char* decode(char s[]);
 char* decode(char s[]);
 
 char* wav_to_morse(ConversionParameters param, WavHeader head);

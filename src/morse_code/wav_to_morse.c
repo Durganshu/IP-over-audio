@@ -4,20 +4,35 @@
 #include "morse_core.h"
 #include "wav_to_morse.h"
 
+const char *morseTable[][2] = {
+    {"A", ".-"},     {"B", "-..."},   {"C", "-.-."},
+    {"D", "-.."},    {"E", "."},      {"F", "..-."},
+    {"G", "--."},    {"H", "...."},    {"I", ".."},
+    {"J", ".---"},   {"K", "-.-"},     {"L", ".-.."},
+    {"M", "--"},     {"N", "-."},      {"O", "---"},
+    {"P", ".--."},   {"Q", "--.-"},    {"R", ".-."},
+    {"S", "..."},    {"T", "-"},       {"U", "..-"},
+    {"V", "...-"},   {"W", ".--"},     {"X", "-..-"},
+    {"Y", "-.--"},   {"Z", "--.."},
+    {"0", "-----"},  {"1", ".----"},   {"2", "..---"},
+    {"3", "...--"},  {"4", "....-"},   {"5", "....."},
+    {"6", "-...."},  {"7", "--..."},   {"8", "---.."},
+    {"9", "----."},
+    {".", ".-.-.-"}, {",", "--..--"},  {"?", "..--.."},
+    {'\'', ".----."}, {"!", "-.-.--"}, {'/', "-..-."},
+	{'(', "-.--."}, {')', "-.--.-"}, {'&', ".-..."},
+	{':', "---..."}, {';', "-.-.-."}, {'=', "-...-"},
+	{'+', ".-.-."}, {'-', "-....-"}, {'_', "..--.-"},
+	{'\"', ".-..-."}, {'$', "...-..-"}, {'@', ".--.-."},
+	{' ', " "}, {"", NULL}  // Null-terminated entry to indicate the end of the array
+};
 
-char* decode(char s[]) {
-    int i, j;
-	for (i=0; i<MAX_CHARS; i++){
-        for (j = 1; morse_table[i][j] != ENDCODE; j++) {
-            if (s[j - 1] != morse_table[i][j]) {
-                break;
-            }
-        }
-        if (morse_table[i][j] == ENDCODE && s[j - 1] == '\0') {
-            return (char*) &morse_table[i][0];
-        }
-    }
-    return "";
+
+char* decode(char* s){
+	for (int i=0; morseTable[i][1] != NULL; i++){
+		if (strcmp(s, morseTable[i][1]) ==0) return morseTable[i][0];
+	}
+return "";
 }
 
 
@@ -60,7 +75,7 @@ char* wav_to_morse(ConversionParameters param, WavHeader head)
     x = new_data[0];
     count = 0;
 	char word[6] = "";
-	char* sentence = (char*)malloc((1024) * sizeof(char));
+	char* sentence = (char*)malloc((MAX_SENTENCE_LENGTH) * sizeof(char));
     memset(sentence, 0, sizeof(char));
 
     for (int j = 0; j<param.new_data_count; j++) {

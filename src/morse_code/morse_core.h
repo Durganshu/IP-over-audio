@@ -52,8 +52,8 @@ extern WavHeader header;
 
 extern ConversionParameters convParams;
 
-void read_Wav_file();
+void read_wav_file();
 
-char* convert_Wav_to_morse();
+char* convert_wav_to_morse();
 
 #endif
