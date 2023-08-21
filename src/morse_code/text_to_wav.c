@@ -60,7 +60,5 @@ void write_morse_char(FILE *output_file, short waveform[], double frequency,
 	/* Write inter-character space */
 	write_silence(output_file, waveform, 2 * unit_duration);
 	fprintf(output_text_file, " ");
-
-	return;
 }
   

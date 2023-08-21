@@ -175,8 +175,7 @@ WavHeader header;
 
 ConversionParameters convParams;
 
-void read_Wav_file(){
-
+void read_wav_file() {
 	const char* filename = "received.wav";
     convParams.file = fopen(filename, "rb");
     if (!convParams.file) {
@@ -186,19 +185,16 @@ void read_Wav_file(){
 
     // Read WAV file header
     fread(&header, sizeof(header), 1, convParams.file);
-    printf("Length %d \n",header.bytes_in_data);
-    printf("sampleRate %d \n",header.sampleRate);
-    printf("bytes_per_second %d \n",header.bytes_per_second);
-    printf("bytes_by_capture %d \n",header.bytes_by_capture);
-    printf("bits_per_sample %d \n",header.bits_per_sample);
+    printf("Length %d\n",header.bytes_in_data);
+    printf("sampleRate %d\n",header.sampleRate);
+    printf("bytes_per_second %d\n",header.bytes_per_second);
+    printf("bytes_by_capture %d\n",header.bytes_by_capture);
+    printf("bits_per_sample %d\n",header.bits_per_sample);
 
 	convParams.samples_group = header.sampleRate/50;
     convParams.new_data_count = (header.bytes_in_data/header.bytes_by_capture)/convParams.samples_group;
-
 }
 
-char* convert_Wav_to_morse(){
-
-	return wav_to_morse(convParams, header);
-
+void convert_wav_to_morse(char message[MAX_SENTENCE_LENGTH]) {
+	wav_to_morse(&convParams, header, message); // The decoded text message
 }
